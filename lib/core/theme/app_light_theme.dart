@@ -181,8 +181,8 @@ class AppLightTheme {
 
   static OutlineInputBorder _inputBorder(Color color) {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide(color: color),
+      borderRadius: BorderRadius.circular(12.r),
+      borderSide: BorderSide(color: color, width: 2.w),
     );
   }
 }

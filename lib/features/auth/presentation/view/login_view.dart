@@ -11,28 +11,25 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 32.w),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                child: IntrinsicHeight(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const AuthHeader(),
-                      SizedBox(height: 32.h),
-                      LoginFormCard(),
-                      SizedBox(height: 32.h),
-                      const AuthFooter(),
-                    ],
-                  ),
-                ),
+        child: Center(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 18.w),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 420.w),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const AuthHeader(),
+                  SizedBox(height: 32.h),
+                  LoginFormCard(),
+                  SizedBox(height: 32.h),
+                  const AuthFooter(),
+                ],
               ),
-            );
-          },
+            ),
+          ),
         ),
       ),
     );
