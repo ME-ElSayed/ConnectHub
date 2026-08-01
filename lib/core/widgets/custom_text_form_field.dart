@@ -18,19 +18,23 @@ class CustomTextFormField extends StatelessWidget {
     this.enabled = true,
     this.validator,
     this.onChanged,
+    this.onSubmit,
+    this.onSuffixIconPressed,
   });
 
   final String label;
   final TextEditingController? controller;
   final String? hintText;
   final Widget? prefixIcon;
-  final Widget? suffixIcon;
+  final IconData? suffixIcon;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
   final bool obscureText;
   final bool enabled;
   final String? Function(String?)? validator;
   final ValueChanged<String>? onChanged;
+  final void Function(String)? onSubmit;
+  final void Function()? onSuffixIconPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +60,8 @@ class CustomTextFormField extends StatelessWidget {
             enabled: enabled,
             keyboardType: keyboardType,
             obscureText: obscureText,
-            obscuringCharacter: '\u2022',
             onChanged: onChanged,
+            onFieldSubmitted: onSubmit,
             style: AppStyles.body16Regular.copyWith(
               color: AppColors.textPrimary,
             ),
@@ -89,8 +93,12 @@ class CustomTextFormField extends StatelessWidget {
               suffixIcon: suffixIcon == null
                   ? null
                   : Padding(
-                      padding: EdgeInsets.only(left: 8.w, right: 12.w),
-                      child: suffixIcon,
+                      padding: EdgeInsets.only(left: 8.w, right: 2.w),
+                      child: IconButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: onSuffixIconPressed,
+                        icon: Icon(suffixIcon, size: 25.r),
+                      ),
                     ),
               suffixIconConstraints: BoxConstraints(
                 minWidth: 40.w,

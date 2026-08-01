@@ -1,31 +1,25 @@
+import 'package:connect_hub/core/widgets/app_button.dart';
+import 'package:connect_hub/core/widgets/custom_text_form_field.dart';
+import 'package:connect_hub/features/auth/presentation/widgets/password_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
-import '../../../../core/constant/app_assets.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
-import '../../../../core/widgets/widgets.dart';
 
-class LoginFormCard extends StatelessWidget {
+class LoginFormCard extends StatefulWidget {
   const LoginFormCard({
     super.key,
-    required this.formKey,
-    required this.emailController,
-    required this.passwordController,
-    required this.isPasswordVisible,
-    required this.onPasswordVisibilityTap,
-    required this.onLoginPressed,
-    this.onForgotPasswordTap,
+    
   });
 
-  final GlobalKey<FormState> formKey;
-  final TextEditingController emailController;
-  final TextEditingController passwordController;
-  final bool isPasswordVisible;
-  final VoidCallback onPasswordVisibilityTap;
-  final VoidCallback onLoginPressed;
-  final VoidCallback? onForgotPasswordTap;
+  @override
+  State<LoginFormCard> createState() => _LoginFormCardState();
+}
+
+class _LoginFormCardState extends State<LoginFormCard> {
+  final GlobalKey<FormState> formKey=GlobalKey<FormState>();
+  final TextEditingController emailController=TextEditingController();
+  final TextEditingController passwordController=TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -68,26 +62,20 @@ class LoginFormCard extends StatelessWidget {
               hintText: 'you@email.com',
               keyboardType: TextInputType.emailAddress,
               label: 'Email',
-              prefixIcon: _FieldIcon(assetName: AppAssets.mail),
+              prefixIcon: Icon(Icons.email_outlined, size: 25.r),
               textInputAction: TextInputAction.next,
             ),
             SizedBox(height: 16.h),
-            CustomTextFormField(
-              controller: passwordController,
-              hintText: '\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022',
-              label: 'Password',
-              obscureText: !isPasswordVisible,
-              prefixIcon: _FieldIcon(assetName: AppAssets.lock),
-              suffixIcon: _PasswordVisibilityButton(
-                onTap: onPasswordVisibilityTap,
-              ),
-              textInputAction: TextInputAction.done,
+           PasswordField(
+              passwordController: passwordController,
             ),
             SizedBox(height: 12.h),
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
-                onPressed: onForgotPasswordTap,
+                onPressed: () {
+                  // Handle forgot password press
+                },
                 style: TextButton.styleFrom(
                   minimumSize: Size.zero,
                   padding: EdgeInsets.zero,
@@ -102,7 +90,7 @@ class LoginFormCard extends StatelessWidget {
               ),
             ),
             SizedBox(height: 24.h),
-            AppButton(text: 'Login', onPressed: onLoginPressed),
+            AppButton(text: 'Login', onPressed: (){}),
           ],
         ),
       ),
@@ -110,38 +98,5 @@ class LoginFormCard extends StatelessWidget {
   }
 }
 
-class _FieldIcon extends StatelessWidget {
-  const _FieldIcon({required this.assetName});
 
-  final String assetName;
 
-  @override
-  Widget build(BuildContext context) {
-    return SvgPicture.asset(
-      assetName,
-      width: 16.r,
-      height: 16.r,
-      fit: BoxFit.fill,
-    );
-  }
-}
-
-class _PasswordVisibilityButton extends StatelessWidget {
-  const _PasswordVisibilityButton({required this.onTap});
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: SvgPicture.asset(
-        AppAssets.eye,
-        width: 16.r,
-        height: 16.r,
-        fit: BoxFit.fill,
-      ),
-    );
-  }
-}
