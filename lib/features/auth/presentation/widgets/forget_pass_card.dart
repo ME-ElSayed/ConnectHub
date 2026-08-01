@@ -18,6 +18,12 @@ class _ForgetPassCardState extends State<ForgetPassCard> {
   final TextEditingController emailController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
+  dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return CustomContainer(
       child: Form(
@@ -39,6 +45,8 @@ class _ForgetPassCardState extends State<ForgetPassCard> {
             ),
             SizedBox(height: 20.h),
             AppButton(
+              
+              foregroundColor: Colors.blue,
               text: 'Send Reset Link',
               onPressed: () {
                 if (!formKey.validateAndScroll()) {

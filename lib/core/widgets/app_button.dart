@@ -1,5 +1,7 @@
+import 'package:connect_hub/core/theme/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../theme/app_colors.dart';
 
 class AppButton extends StatelessWidget {
@@ -7,7 +9,7 @@ class AppButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.onPressed,
-    this.height = 48,
+    this.height = 60,
     this.borderRadius = 12,
     this.backgroundColor = AppColors.primary,
     this.foregroundColor = AppColors.textOnPrimary,
@@ -49,18 +51,30 @@ class AppButton extends StatelessWidget {
       child: SizedBox(
         width: double.infinity,
         height: height.h,
-        child: FilledButton(
+        child: ElevatedButton(
           onPressed: isEnabled ? onPressed : null,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: backgroundColor,
+            foregroundColor: foregroundColor,
+            elevation: 0,
+            padding: EdgeInsets.zero,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(borderRadius.r),
+            ),
+          ),
           child: isLoading
               ? SizedBox(
-                  width: 18.r,
-                  height: 18.r,
+                  width: 25.r,
+                  height: 25.r,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
                     color: foregroundColor,
                   ),
                 )
-              : Text(text),
+              : Padding(
+                  padding: EdgeInsets.only(top: 14.h, bottom: 14.h),
+                  child: Text(text, style: AppStyles.label14OnPrimarySemiBold),
+                ),
         ),
       ),
     );
