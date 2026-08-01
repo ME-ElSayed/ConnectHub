@@ -1,3 +1,4 @@
+import 'package:connect_hub/features/auth/presentation/view/forget_password_view.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/auth/presentation/view/login_view.dart';
@@ -19,6 +20,11 @@ class AppRouter {
         path: Routes.login,
         name: RouteNames.login,
         builder: (context, state) => const LoginView(),
+      ),
+      GoRoute(
+        path: Routes.forgetPassword,
+        name: RouteNames.forgetPassword,
+        builder: (context, state) => const ForgetPasswordView(),
       ),
     ],
   );
