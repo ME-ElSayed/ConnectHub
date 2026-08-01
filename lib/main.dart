@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'core/constant/app_constants.dart';
+import 'core/routing/app_router.dart';
 import 'core/theme/app_light_theme.dart';
-import 'features/splash/presentation/view/splash_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,14 +22,13 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return MaterialApp(
+        return MaterialApp.router(
           debugShowCheckedModeBanner: false,
           title: 'ConnectHub',
           theme: AppLightTheme.theme,
-          home: child ?? const SplashView(),
+          routerConfig: AppRouter.router,
         );
       },
-      child: const SplashView(),
     );
   }
 }
