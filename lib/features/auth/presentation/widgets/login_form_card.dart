@@ -1,3 +1,6 @@
+import 'package:connect_hub/core/extensions/form_auth_scroll.dart';
+import 'package:connect_hub/core/utils/app_validator.dart';
+import 'package:connect_hub/core/utils/validation_types.dart';
 import 'package:connect_hub/core/widgets/app_button.dart';
 import 'package:connect_hub/core/widgets/custom_text_form_field.dart';
 import 'package:connect_hub/features/auth/presentation/widgets/password_field.dart';
@@ -7,25 +10,23 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 
 class LoginFormCard extends StatefulWidget {
-  const LoginFormCard({
-    super.key,
-    
-  });
+  const LoginFormCard({super.key});
 
   @override
   State<LoginFormCard> createState() => _LoginFormCardState();
 }
 
 class _LoginFormCardState extends State<LoginFormCard> {
-  final GlobalKey<FormState> formKey=GlobalKey<FormState>();
-  final TextEditingController emailController=TextEditingController();
-  final TextEditingController passwordController=TextEditingController();
-@override
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -63,6 +64,10 @@ class _LoginFormCardState extends State<LoginFormCard> {
             ),
             SizedBox(height: 24.h),
             CustomTextFormField(
+              validator: (value) => AppValidator.validate(
+                value: value!,
+                type: ValidationType.email,
+              ),
               controller: emailController,
               hintText: 'you@email.com',
               keyboardType: TextInputType.emailAddress,
@@ -71,7 +76,13 @@ class _LoginFormCardState extends State<LoginFormCard> {
               textInputAction: TextInputAction.next,
             ),
             SizedBox(height: 16.h),
-           PasswordField(
+            PasswordField(
+              validator: (value) => AppValidator.validate(
+                min: 8,
+                max: 16,
+                value: value!,
+                type: ValidationType.password,
+              ),
               passwordController: passwordController,
             ),
             SizedBox(height: 12.h),
@@ -95,13 +106,17 @@ class _LoginFormCardState extends State<LoginFormCard> {
               ),
             ),
             SizedBox(height: 24.h),
-            AppButton(text: 'Login', onPressed: (){}),
+            AppButton(
+              text: 'Login',
+              onPressed: () {
+                if (!formKey.validateAndScroll()) {
+                  // Handle login logic here
+                }
+              },
+            ),
           ],
         ),
       ),
     );
   }
 }
-
-
-

@@ -52,6 +52,7 @@ class AppLightTheme {
       ),
 
       inputDecorationTheme: InputDecorationTheme(
+        errorMaxLines: 2,
         filled: true,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,

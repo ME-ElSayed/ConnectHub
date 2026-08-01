@@ -4,7 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PasswordField extends StatefulWidget {
   final TextEditingController passwordController;
-  const PasswordField({super.key, required this.passwordController});
+  final String? Function(String?)? validator;
+  const PasswordField({super.key, required this.passwordController, this.validator});
 
   @override
   State<PasswordField> createState() => _PasswordFieldState();
@@ -15,6 +16,7 @@ class _PasswordFieldState extends State<PasswordField> {
   @override
   Widget build(BuildContext context) {
     return CustomTextFormField(
+      validator: widget.validator,
       controller: widget.passwordController,
       hintText: 'enter password',
       label: 'Password',

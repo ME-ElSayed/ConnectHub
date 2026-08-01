@@ -42,47 +42,36 @@ class CustomTextFormField extends StatelessWidget {
       children: [
         Text(label, style: theme.textTheme.bodyMedium),
         SizedBox(height: 8.h),
-        DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12.r),
-            boxShadow: const [
-              BoxShadow(
-                color: Color(0x14000000),
-                blurRadius: 2,
-                offset: Offset(0, 1),
-              ),
-            ],
-          ),
-          child: TextFormField(
-            controller: controller,
-            enabled: enabled,
-            keyboardType: keyboardType,
-            textInputAction: textInputAction,
-            obscureText: obscureText,
-            validator: validator,
-            onChanged: onChanged,
-            onFieldSubmitted: onSubmit,
-            cursorColor: theme.colorScheme.primary,
-            style: theme.textTheme.bodyLarge,
-            decoration: InputDecoration(
-              hintText: hintText,
-              prefixIcon: prefixIcon == null
-                  ? null
-                  : Padding(
-                      padding: EdgeInsets.only(left: 12.w, right: 8.w),
-                      child: prefixIcon,
-                    ),
-              prefixIconConstraints: BoxConstraints(
-                minWidth: 36.w,
-                minHeight: 44.h,
-              ),
-              suffixIcon: suffixIcon == null
-                  ? null
-                  : IconButton(
-                      onPressed: onSuffixIconPressed,
-                      icon: Icon(suffixIcon),
-                    ),
+        TextFormField(
+          controller: controller,
+          enabled: enabled,
+          keyboardType: keyboardType,
+          textInputAction: textInputAction,
+          obscureText: obscureText,
+          validator: validator,
+          onChanged: onChanged,
+          onFieldSubmitted: onSubmit,
+          cursorColor: theme.colorScheme.primary,
+          style: theme.textTheme.bodyLarge,
+          
+          decoration: InputDecoration(
+            hintText: hintText,
+            prefixIcon: prefixIcon == null
+                ? null
+                : Padding(
+                    padding: EdgeInsets.only(left: 12.w, right: 8.w),
+                    child: prefixIcon,
+                  ),
+            prefixIconConstraints: BoxConstraints(
+              minWidth: 36.w,
+              minHeight: 44.h,
             ),
+            suffixIcon: suffixIcon == null
+                ? null
+                : IconButton(
+                    onPressed: onSuffixIconPressed,
+                    icon: Icon(suffixIcon),
+                  ),
           ),
         ),
       ],
