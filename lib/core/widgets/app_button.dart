@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../theme/app_colors.dart';
-import '../theme/app_styles.dart';
 
 class AppButton extends StatelessWidget {
   const AppButton({
@@ -53,17 +51,6 @@ class AppButton extends StatelessWidget {
         height: height.h,
         child: FilledButton(
           onPressed: isEnabled ? onPressed : null,
-          style: FilledButton.styleFrom(
-            backgroundColor: backgroundColor,
-            foregroundColor: foregroundColor,
-            disabledBackgroundColor: AppColors.neutral100,
-            disabledForegroundColor: AppColors.textSecondary,
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(borderRadius.r),
-            ),
-            textStyle: AppStyles.label14SemiBold,
-          ),
           child: isLoading
               ? SizedBox(
                   width: 18.r,

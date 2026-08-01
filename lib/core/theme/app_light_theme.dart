@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'app_colors.dart';
 import 'app_styles.dart';
@@ -49,8 +50,9 @@ class AppLightTheme {
         space: 1,
         thickness: 1,
       ),
+
       inputDecorationTheme: InputDecorationTheme(
-        filled: false,
+        filled: true,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 12,
@@ -58,6 +60,7 @@ class AppLightTheme {
         hintStyle: textTheme.bodyLarge?.copyWith(
           color: AppColors.textSecondary,
         ),
+        fillColor: AppColors.surface,
         prefixIconColor: AppColors.textSecondary,
         suffixIconColor: AppColors.textSecondary,
         enabledBorder: _inputBorder(AppColors.border),
@@ -88,12 +91,12 @@ class AppLightTheme {
           foregroundColor: AppColors.textOnPrimary,
           disabledBackgroundColor: AppColors.neutral100,
           disabledForegroundColor: AppColors.textSecondary,
-          minimumSize: const Size.fromHeight(48),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          minimumSize: Size.fromHeight(48.h),
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
           ),
-          textStyle: textTheme.labelLarge,
+          textStyle: AppStyles.label14SemiBold,
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(

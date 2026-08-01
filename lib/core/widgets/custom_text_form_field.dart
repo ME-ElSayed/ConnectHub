@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../theme/app_colors.dart';
-import '../theme/app_styles.dart';
-
 class CustomTextFormField extends StatelessWidget {
   const CustomTextFormField({
     super.key,
@@ -34,52 +31,41 @@ class CustomTextFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final ValueChanged<String>? onChanged;
   final void Function(String)? onSubmit;
-  final void Function()? onSuffixIconPressed;
+  final VoidCallback? onSuffixIconPressed;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: AppStyles.body14Regular),
+        Text(label, style: theme.textTheme.bodyMedium),
         SizedBox(height: 8.h),
         DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12.r),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
-                color: AppColors.shadowLight,
-                blurRadius: 2.r,
-                offset: Offset(0, 1.h),
+                color: Color(0x14000000),
+                blurRadius: 2,
+                offset: Offset(0, 1),
               ),
             ],
           ),
           child: TextFormField(
             controller: controller,
-            cursorColor: AppColors.primary,
             enabled: enabled,
             keyboardType: keyboardType,
+            textInputAction: textInputAction,
             obscureText: obscureText,
+            validator: validator,
             onChanged: onChanged,
             onFieldSubmitted: onSubmit,
-            style: AppStyles.body16Regular.copyWith(
-              color: AppColors.textPrimary,
-            ),
-            textInputAction: textInputAction,
-            validator: validator,
+            cursorColor: theme.colorScheme.primary,
+            style: theme.textTheme.bodyLarge,
             decoration: InputDecoration(
               hintText: hintText,
-              hintStyle: AppStyles.body16Regular.copyWith(
-                color: AppColors.textSecondary,
-              ),
-              isDense: true,
-              filled: true,
-              fillColor: AppColors.surface,
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 12.w,
-                vertical: 10.h,
-              ),
-              constraints: BoxConstraints(minHeight: 44.h),
               prefixIcon: prefixIcon == null
                   ? null
                   : Padding(
@@ -92,34 +78,14 @@ class CustomTextFormField extends StatelessWidget {
               ),
               suffixIcon: suffixIcon == null
                   ? null
-                  : Padding(
-                      padding: EdgeInsets.only(left: 8.w, right: 2.w),
-                      child: IconButton(
-                        padding: EdgeInsets.zero,
-                        onPressed: onSuffixIconPressed,
-                        icon: Icon(suffixIcon, size: 25.r),
-                      ),
+                  : IconButton(
+                      onPressed: onSuffixIconPressed,
+                      icon: Icon(suffixIcon),
                     ),
-              suffixIconConstraints: BoxConstraints(
-                minWidth: 40.w,
-                minHeight: 44.h,
-              ),
-              enabledBorder: _border(AppColors.border),
-              focusedBorder: _border(AppColors.primary),
-              errorBorder: _border(Colors.red),
-              focusedErrorBorder: _border(Colors.red),
-              disabledBorder: _border(AppColors.border),
             ),
           ),
         ),
       ],
-    );
-  }
-
-  static OutlineInputBorder _border(Color color) {
-    return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12.r),
-      borderSide: BorderSide(color: color),
     );
   }
 }
