@@ -1,4 +1,5 @@
 import 'package:connect_hub/core/extensions/form_auth_scroll.dart';
+import 'package:connect_hub/core/routing/routes.dart';
 import 'package:connect_hub/core/utils/app_validator.dart';
 import 'package:connect_hub/core/utils/validation_types.dart';
 import 'package:connect_hub/core/widgets/app_button.dart';
@@ -7,6 +8,7 @@ import 'package:connect_hub/features/auth/presentation/widgets/custom_container.
 import 'package:connect_hub/features/auth/presentation/widgets/password_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_styles.dart';
 
@@ -70,7 +72,7 @@ class _LoginFormCardState extends State<LoginFormCard> {
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () {
-                  // Handle forgot password press
+                  context.push(Routes.forgetPassword);
                 },
                 style: TextButton.styleFrom(
                   minimumSize: Size.zero,

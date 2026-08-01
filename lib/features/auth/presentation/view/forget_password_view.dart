@@ -1,17 +1,14 @@
+import 'package:connect_hub/features/auth/presentation/widgets/auth_header.dart';
+import 'package:connect_hub/features/auth/presentation/widgets/forget_pass_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
-import '../widgets/auth_footer.dart';
-import '../widgets/auth_header.dart';
-import '../widgets/login_form_card.dart';
-
-class LoginView extends StatelessWidget {
-  const LoginView({super.key});
+class ForgetPasswordView extends StatelessWidget {
+  const ForgetPasswordView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+      return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Center(
@@ -22,13 +19,14 @@ class LoginView extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const AuthHeader(),
-                  SizedBox(height: 32.h),
-                  LoginFormCard(),
-                  SizedBox(height: 32.h),
-                  AuthFooter(
-                   
+                  const AuthHeader(
+                    title: 'Forgot Password?',
+                    subtitle: 'Enter your email address and we will send you a link to reset your password.',
                   ),
+                  SizedBox(height: 32.h),
+                  const ForgetPassCard(),
+                  SizedBox(height: 32.h),
+                  
                 ],
               ),
             ),
