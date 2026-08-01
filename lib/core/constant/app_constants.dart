@@ -18,6 +18,6 @@ class AppConstants {
   static const Duration animationDuration = Duration(milliseconds: 300);
 
   // Design sizes
-  static const double designWidth = 390.0;
-  static const double designHeight = 884.0;
+  static const double designWidth = 402;
+  static const double designHeight = 874;
 }
