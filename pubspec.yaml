@@ -58,6 +58,7 @@ dependencies:
   image_picker: ^1.2.3
   cached_network_image: ^3.4.1
   flutter_svg: ^2.3.0
+  image_cropper: ^12.2.1
 
   #Responsive
   flutter_screenutil: ^5.9.3
@@ -79,6 +80,7 @@ dependencies:
   #Utilities
   intl: ^0.20.3
   dartz: ^0.10.1
+  permission_handler: ^13.0.0
 
 dev_dependencies:
   flutter_test:
