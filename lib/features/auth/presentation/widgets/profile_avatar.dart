@@ -1,84 +1,127 @@
+import 'dart:io';
+
 import 'package:connect_hub/core/theme/app_colors.dart';
+import 'package:connect_hub/core/utils/app_assets.dart';
+import 'package:connect_hub/features/auth/presentation/cubits/profile_avatar/profile_avatar_cubit.dart';
+import 'package:connect_hub/features/auth/presentation/cubits/profile_avatar/profile_avatar_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ProfileAvatar extends StatelessWidget {
-  final bool isLoading;
-  final Image image;
-  final IconData? icon;
-  final void Function()? onPressed;
-  final void Function()? onRemove;
 
+class ProfileAvatar extends StatelessWidget {
   const ProfileAvatar({
     super.key,
-    required this.image,
-    this.icon,
-    this.onPressed,
-    required this.isLoading,
-    this.onRemove,
+    this.networkImageUrl,
+    this.defaultAssetPath = AppAssets.avatar,
+    this.icon = Icons.camera_alt,
+    this.showRemoveButton = true,
+    this.onImageChanged,
   });
+
+  final String? networkImageUrl;
+  final String defaultAssetPath;
+  final IconData? icon;
+  final bool showRemoveButton;
+  final ValueChanged<File?>? onImageChanged;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        /// Avatar
-        CircleAvatar(
-          radius: 60.r,
-          backgroundColor: Colors.grey,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(60.r),
-            child: image,
-          ),
-        ),
+    return BlocProvider(
+      create: (_) => ProfileAvatarCubit(
+        initialImageUrl: networkImageUrl,
+        defaultAssetPath: defaultAssetPath,
+      ),
+      child: _ProfileAvatarView(
+        icon: icon,
+        showRemoveButton: showRemoveButton,
+        onImageChanged: onImageChanged,
+      ),
+    );
+  }
+}
 
-        /// Camera button
-        Positioned(
-          bottom: 0,
-          right: 0,
-          child: GestureDetector(
-            //splashColor: Colors.transparent,
-            onTap: onPressed,
-            child: (icon == null)
-                ? SizedBox.shrink()
-                : Container(
-                    padding: EdgeInsets.all(9.r),
-                    decoration: const BoxDecoration(
-                      color: AppColors.primary,
-                      shape: BoxShape.circle,
-                    ),
-                    child: isLoading
-                        ? SizedBox(
-                            width: 20.w,
-                            height: 20.h,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2.w,
-                            ),
-                          )
-                        : Icon(icon, color: Colors.white, size: 24.sp),
-                  ),
-          ),
-        ),
+class _ProfileAvatarView extends StatelessWidget {
+  const _ProfileAvatarView({
+    required this.icon,
+    required this.showRemoveButton,
+    required this.onImageChanged,
+  });
 
-        /// Remove button (only if onRemove provided)
-        if (onRemove != null && !isLoading)
-          Positioned(
-            top: 0,
-            right: 0,
-            child: InkWell(
-              onTap: onRemove,
-              child: Container(
-                padding: EdgeInsets.all(6.r),
-                decoration: const BoxDecoration(
-                  color: Colors.red,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(Icons.close, size: 14.sp, color: Colors.white),
+  final IconData? icon;
+  final bool showRemoveButton;
+  final ValueChanged<File?>? onImageChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<ProfileAvatarCubit, ProfileAvatarState>(
+      listenWhen: (prev, curr) => prev.imageFile != curr.imageFile,
+      listener: (context, state) => onImageChanged?.call(state.imageFile),
+      child: BlocBuilder<ProfileAvatarCubit, ProfileAvatarState>(
+        builder: (context, state) {
+          final cubit = context.read<ProfileAvatarCubit>();
+
+          return Stack(
+            clipBehavior: Clip.none,
+            children: [
+              CircleAvatar(
+                radius: 60.r,
+                backgroundColor: Colors.grey.shade300,
+                backgroundImage: state.image,
               ),
-            ),
-          ),
-      ],
+
+              if (icon != null)
+                Positioned(
+                  right: 0,
+                  bottom: 0,
+                  child: InkWell(
+                    onTap: state.isLoading
+                        ? null
+                        : () => cubit.pickImage(context),
+                    borderRadius: BorderRadius.circular(100),
+                    child: Container(
+                      padding: EdgeInsets.all(10.r),
+                      decoration: const BoxDecoration(
+                        color: AppColors.primary,
+                        shape: BoxShape.circle,
+                      ),
+                      child: state.isLoading
+                          ? SizedBox(
+                              width: 20.r,
+                              height: 20.r,
+                              child: const CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : Icon(icon, color: Colors.white, size: 22.sp),
+                    ),
+                  ),
+                ),
+
+              if (state.hasCustomImage &&
+                  showRemoveButton &&
+                  !state.isLoading)
+                Positioned(
+                  top: -2,
+                  right: -2,
+                  child: InkWell(
+                    onTap: cubit.removeImage,
+                    borderRadius: BorderRadius.circular(100),
+                    child: Container(
+                      padding: EdgeInsets.all(6.r),
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(Icons.close, size: 14.sp, color: Colors.white),
+                    ),
+                  ),
+                ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

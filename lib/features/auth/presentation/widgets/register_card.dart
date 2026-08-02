@@ -1,7 +1,7 @@
+import 'dart:io';
+
 import 'package:connect_hub/core/extensions/form_auth_scroll.dart';
-import 'package:connect_hub/core/services/image_service.dart';
 import 'package:connect_hub/core/theme/app_styles.dart';
-import 'package:connect_hub/core/utils/app_assets.dart';
 import 'package:connect_hub/core/utils/app_validator.dart';
 import 'package:connect_hub/core/utils/validation_types.dart';
 import 'package:connect_hub/core/widgets/app_button.dart';
@@ -26,6 +26,7 @@ class _RegisterCardState extends State<RegisterCard> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
   final TextEditingController nameController = TextEditingController();
+  File? avatarFile;
   @override
   Widget build(BuildContext context) {
     return CustomContainer(
@@ -41,17 +42,10 @@ class _RegisterCardState extends State<RegisterCard> {
               style: AppStyles.body14SecondaryRegular,
             ),
             SizedBox(height: 15.h),
-            Center(
+             Center(
               child: ProfileAvatar(
-                isLoading: false,
-                image: Image.asset(AppAssets.avatar, fit: BoxFit.cover),
-                icon: Icons.camera_alt_outlined,
-                onPressed: () {
-                  ImageService.pickAndCropImage(context).then((file) {
-                    if (file != null) {
-                      // Handle the selected image file
-                    }
-                  });
+                onImageChanged: (file) {
+                  setState(() => avatarFile = file);
                 },
               ),
             ),
