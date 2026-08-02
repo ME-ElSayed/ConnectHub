@@ -1,5 +1,4 @@
 import 'package:connect_hub/core/extensions/form_auth_scroll.dart';
-import 'package:connect_hub/core/theme/app_colors.dart';
 import 'package:connect_hub/core/theme/app_styles.dart';
 import 'package:connect_hub/core/utils/app_validator.dart';
 import 'package:connect_hub/core/utils/validation_types.dart';
@@ -72,6 +71,7 @@ class _RegisterCardState extends State<RegisterCard> {
                 value: value!,
                 type: ValidationType.password,
               ),
+              textInputAction: TextInputAction.next,
               passwordController: passwordController,
             ),
             SizedBox(height: 16.h),
@@ -83,6 +83,7 @@ class _RegisterCardState extends State<RegisterCard> {
                 type: ValidationType.confirmPassword,
                 matchWith: passwordController.text,
               ),
+              textInputAction: TextInputAction.done,
               passwordController: confirmPasswordController,
               hintText: 'confirm your password',
               label: 'Confirm Password',
