@@ -1,10 +1,13 @@
-import 'package:connect_hub/core/extensions/form_auth_scroll.dart';
 import 'package:connect_hub/core/utils/app_validator.dart';
+import 'package:connect_hub/core/utils/show_message.dart';
 import 'package:connect_hub/core/utils/validation_types.dart';
 import 'package:connect_hub/core/widgets/app_button.dart';
 import 'package:connect_hub/core/widgets/custom_text_form_field.dart';
+import 'package:connect_hub/features/auth/presentation/cubits/auth_cubit/auth_cubit.dart';
+import 'package:connect_hub/features/auth/presentation/cubits/auth_cubit/auth_state.dart';
 import 'package:connect_hub/features/auth/presentation/widgets/custom_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ForgetPassCard extends StatefulWidget {
@@ -44,14 +47,41 @@ class _ForgetPassCardState extends State<ForgetPassCard> {
               textInputAction: TextInputAction.next,
             ),
             SizedBox(height: 20.h),
-            AppButton(
-              
-              foregroundColor: Colors.blue,
-              text: 'Send Reset Link',
-              onPressed: () {
-                if (!formKey.validateAndScroll()) {
-                  // Handle login logic here
+            BlocConsumer<AuthCubit, AuthState>(
+              listener: (context, state) {
+                if (state is AuthSuccess) {
+                  showMessage(
+                    context,
+                    "sending",
+                    "sending successfully",
+                    Colors.green,
+                    Colors.white,
+                  );
+                } else if (state is AuthFailure) {
+                  showMessage(
+                    context,
+                    'sending Failed',
+                    state.message,
+                    Colors.red,
+                    Colors.white,
+                  );
                 }
+              },
+              builder: (context, state) {
+                return AppButton(
+                  isLoading: state is AuthLoading,
+                  foregroundColor: Colors.blue,
+                  text: 'Send Reset Link',
+                  onPressed: state is AuthLoading
+                      ? null
+                      : () {
+                          if (formKey.currentState!.validate()) {
+                            context.read<AuthCubit>().resetPassword(
+                              email: emailController.text.trim(),
+                            );
+                          }
+                        },
+                );
               },
             ),
           ],

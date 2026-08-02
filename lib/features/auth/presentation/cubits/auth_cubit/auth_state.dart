@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 
 sealed class AuthState {
   const AuthState();
@@ -22,8 +21,3 @@ class AuthFailure extends AuthState {
   const AuthFailure({required this.message});
 }
 
-class AuthMessage extends AuthState {
-  final String message;
-
-  const AuthMessage(this.message);
-}

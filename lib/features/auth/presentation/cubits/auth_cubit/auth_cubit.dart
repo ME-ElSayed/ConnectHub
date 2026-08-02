@@ -49,13 +49,13 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> resetPassword(String email) async {
+  Future<void> resetPassword({required String email}) async {
     emit(const AuthLoading());
 
     try {
       await repository.resetPassword(email);
 
-      emit(const AuthMessage("Password reset email sent successfully."));
+      emit(const AuthSuccess());
     } on FirebaseAuthException catch (e) {
       emit(AuthFailure(message: _authErrorMessage(e)));
     } catch (e) {
@@ -63,7 +63,7 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-Future<void> logout() async {
+  Future<void> logout() async {
     emit(const AuthLoading());
 
     try {
@@ -73,7 +73,6 @@ Future<void> logout() async {
       emit(AuthFailure(message: e.toString()));
     }
   }
-  
 
   String _authErrorMessage(FirebaseAuthException exception) {
     switch (exception.code) {
