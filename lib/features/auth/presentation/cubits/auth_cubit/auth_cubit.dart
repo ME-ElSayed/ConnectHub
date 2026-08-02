@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:connect_hub/features/auth/data/repos/auth_repo.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'auth_state.dart';
@@ -19,34 +20,32 @@ class AuthCubit extends Cubit<AuthState> {
     emit(const AuthLoading());
 
     try {
-      final user = await repository.register(
+      await repository.register(
         name: name,
         email: email,
         password: password,
         image: image,
       );
 
-      emit(AuthSuccess(user));
+      emit(AuthSuccess());
+    } on FirebaseAuthException catch (e) {
+      emit(AuthFailure(message: _authErrorMessage(e)));
     } catch (e) {
-      emit(AuthFailure(e.toString()));
+      emit(AuthFailure(message: e.toString()));
     }
   }
 
-  Future<void> login({
-    required String email,
-    required String password,
-  }) async {
+  Future<void> login({required String email, required String password}) async {
     emit(const AuthLoading());
 
     try {
-      final user = await repository.login(
-        email: email,
-        password: password,
-      );
+      await repository.login(email: email, password: password);
 
-      emit(AuthSuccess(user));
+      emit(AuthSuccess());
+    } on FirebaseAuthException catch (e) {
+      emit(AuthFailure(message: _authErrorMessage(e)));
     } catch (e) {
-      emit(AuthFailure(e.toString()));
+      emit(AuthFailure(message: e.toString()));
     }
   }
 
@@ -56,19 +55,44 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       await repository.resetPassword(email);
 
-      emit(
-        const AuthMessage(
-          "Password reset email sent successfully.",
-        ),
-      );
+      emit(const AuthMessage("Password reset email sent successfully."));
+    } on FirebaseAuthException catch (e) {
+      emit(AuthFailure(message: _authErrorMessage(e)));
     } catch (e) {
-      emit(AuthFailure(e.toString()));
+      emit(AuthFailure(message: e.toString()));
     }
   }
 
-  Future<void> logout() async {
-    await repository.logout();
+Future<void> logout() async {
+    emit(const AuthLoading());
 
-    emit(const AuthInitial());
+    try {
+      await repository.logout();
+      emit(const AuthSuccess());
+    } catch (e) {
+      emit(AuthFailure(message: e.toString()));
+    }
+  }
+  
+
+  String _authErrorMessage(FirebaseAuthException exception) {
+    switch (exception.code) {
+      case 'invalid-credential':
+      case 'user-not-found':
+      case 'wrong-password':
+        return 'Wrong email or password';
+      case 'weak-password':
+        return 'The password provided is too weak';
+      case 'email-already-in-use':
+        return 'The account already exists for that email';
+      case 'invalid-email':
+        return 'Please enter a valid email address';
+      case 'user-disabled':
+        return 'This account has been disabled';
+      case 'requires-recent-login':
+        return 'Please sign in again to delete this account';
+      default:
+        return exception.message ?? 'Authentication failed. Please try again.';
+    }
   }
 }

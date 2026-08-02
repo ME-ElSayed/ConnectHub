@@ -30,6 +30,15 @@ class _RegisterCardState extends State<RegisterCard> {
   final TextEditingController nameController = TextEditingController();
   File? avatarFile;
   @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    nameController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return CustomContainer(
       child: Form(

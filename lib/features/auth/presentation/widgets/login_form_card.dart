@@ -1,12 +1,15 @@
-import 'package:connect_hub/core/extensions/form_auth_scroll.dart';
 import 'package:connect_hub/core/routing/routes.dart';
 import 'package:connect_hub/core/utils/app_validator.dart';
+import 'package:connect_hub/core/utils/show_message.dart';
 import 'package:connect_hub/core/utils/validation_types.dart';
 import 'package:connect_hub/core/widgets/app_button.dart';
 import 'package:connect_hub/core/widgets/custom_text_form_field.dart';
+import 'package:connect_hub/features/auth/presentation/cubits/auth_cubit/auth_cubit.dart';
+import 'package:connect_hub/features/auth/presentation/cubits/auth_cubit/auth_state.dart';
 import 'package:connect_hub/features/auth/presentation/widgets/custom_container.dart';
 import 'package:connect_hub/features/auth/presentation/widgets/password_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -71,8 +74,10 @@ class _LoginFormCardState extends State<LoginFormCard> {
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
-                onPressed: () {
-                  context.push(Routes.forgetPassword);
+                onPressed: () async {
+                  await context.push(Routes.forgetPassword);
+                  emailController.clear();
+                  passwordController.clear();
                 },
                 style: TextButton.styleFrom(
                   minimumSize: Size.zero,
@@ -88,12 +93,37 @@ class _LoginFormCardState extends State<LoginFormCard> {
               ),
             ),
             SizedBox(height: 24.h),
-            AppButton(
-              text: 'Login',
-              onPressed: () {
-                if (!formKey.validateAndScroll()) {
-                  // Handle login logic here
+            BlocConsumer<AuthCubit, AuthState>(
+              listener: (context, state) {
+                if (state is AuthSuccess) {
+                  // todo: navigate to home screen
+                  debugPrint('Login successful');
+                } else if (state is AuthFailure) {
+                  showMessage(
+                    context,
+                    'Login Failed',
+                    state.message,
+                    Colors.red,
+                    Colors.white,
+                  );
                 }
+              },
+              builder: (context, state) {
+                return AppButton(
+                  isLoading: state is AuthLoading,
+                  foregroundColor: Colors.blue,
+                  text: 'Login',
+                  onPressed: state is AuthLoading
+                      ? null
+                      : () {
+                          if (formKey.currentState!.validate()) {
+                            context.read<AuthCubit>().login(
+                              email: emailController.text.trim(),
+                              password: passwordController.text,
+                            );
+                          }
+                        },
+                );
               },
             ),
           ],
