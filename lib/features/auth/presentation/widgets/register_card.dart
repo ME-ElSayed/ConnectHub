@@ -1,4 +1,5 @@
 import 'package:connect_hub/core/extensions/form_auth_scroll.dart';
+import 'package:connect_hub/core/services/image_service.dart';
 import 'package:connect_hub/core/theme/app_styles.dart';
 import 'package:connect_hub/core/utils/app_assets.dart';
 import 'package:connect_hub/core/utils/app_validator.dart';
@@ -45,7 +46,13 @@ class _RegisterCardState extends State<RegisterCard> {
                 isLoading: false,
                 image: Image.asset(AppAssets.avatar, fit: BoxFit.cover),
                 icon: Icons.camera_alt_outlined,
-                onPressed: () {},
+                onPressed: () {
+                  ImageService.pickAndCropImage(context).then((file) {
+                    if (file != null) {
+                      // Handle the selected image file
+                    }
+                  });
+                },
               ),
             ),
             SizedBox(height: 24.h),
