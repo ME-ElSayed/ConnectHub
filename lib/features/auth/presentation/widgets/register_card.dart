@@ -1,15 +1,17 @@
 import 'dart:io';
-
-import 'package:connect_hub/core/extensions/form_auth_scroll.dart';
 import 'package:connect_hub/core/theme/app_styles.dart';
 import 'package:connect_hub/core/utils/app_validator.dart';
+import 'package:connect_hub/core/utils/show_message.dart';
 import 'package:connect_hub/core/utils/validation_types.dart';
 import 'package:connect_hub/core/widgets/app_button.dart';
 import 'package:connect_hub/core/widgets/custom_text_form_field.dart';
+import 'package:connect_hub/features/auth/presentation/cubits/auth_cubit/auth_cubit.dart';
+import 'package:connect_hub/features/auth/presentation/cubits/auth_cubit/auth_state.dart';
 import 'package:connect_hub/features/auth/presentation/widgets/custom_container.dart';
 import 'package:connect_hub/features/auth/presentation/widgets/password_field.dart';
 import 'package:connect_hub/features/auth/presentation/widgets/profile_avatar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RegisterCard extends StatefulWidget {
@@ -42,7 +44,7 @@ class _RegisterCardState extends State<RegisterCard> {
               style: AppStyles.body14SecondaryRegular,
             ),
             SizedBox(height: 15.h),
-             Center(
+            Center(
               child: ProfileAvatar(
                 onImageChanged: (file) {
                   setState(() => avatarFile = file);
@@ -102,12 +104,55 @@ class _RegisterCardState extends State<RegisterCard> {
             ),
 
             SizedBox(height: 24.h),
-            AppButton(
-              text: 'Register',
-              onPressed: () {
-                if (!formKey.validateAndScroll()) {
-                  // Handle registration logic here
+            BlocConsumer<AuthCubit, AuthState>(
+              listener: (context, state) {
+                if (state is AuthFailure) {
+                  showMessage(
+                    context,
+                    'Registration Failed',
+                    state.message,
+                    Colors.red,
+                    Colors.white,
+                  );
+                } else if (state is AuthSuccess) {
+                  showMessage(
+                    context,
+                    'Registration Successful',
+                    'You have successfully registered.',
+                    Colors.green,
+                    Colors.white,
+                  );
                 }
+              },
+              builder: (context, state) {
+                return AppButton(
+                  isLoading: state is AuthLoading,
+                  foregroundColor: Colors.blue,
+                  text: 'Register',
+                  onPressed: state is AuthLoading
+                      ? null
+                      : () {
+                          if (formKey.currentState!.validate()) {
+                            if (avatarFile == null) {
+                              showMessage(
+                                context,
+                                'Missing Image',
+                                'Please select a profile picture.',
+                                Colors.orange,
+                                Colors.white,
+                              );
+                              return;
+                            }
+
+                            context.read<AuthCubit>().register(
+                              name: nameController.text.trim(),
+                              email: emailController.text.trim(),
+                              password: passwordController.text,
+                              image: avatarFile!,
+                            );
+                          }
+                        },
+                );
               },
             ),
           ],

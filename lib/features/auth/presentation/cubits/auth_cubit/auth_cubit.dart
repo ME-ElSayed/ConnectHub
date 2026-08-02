@@ -1,14 +1,14 @@
 import 'dart:io';
 
 import 'package:connect_hub/features/auth/data/repos/auth_repo.dart';
-import 'package:connect_hub/features/auth/presentation/cubits/auth_cubit/auth_state.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final AuthRepository repository;
 
-  AuthCubit(this.repository) : super(AuthInitial());
+  AuthCubit(this.repository) : super(const AuthInitial());
 
   Future<void> register({
     required String name,
@@ -16,7 +16,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String password,
     required File image,
   }) async {
-    emit(AuthLoading());
+    emit(const AuthLoading());
 
     try {
       final user = await repository.register(
@@ -27,8 +27,6 @@ class AuthCubit extends Cubit<AuthState> {
       );
 
       emit(AuthSuccess(user));
-    } on FirebaseAuthException catch (e) {
-      emit(AuthFailure(e.message ?? "Authentication failed"));
     } catch (e) {
       emit(AuthFailure(e.toString()));
     }
@@ -38,7 +36,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String email,
     required String password,
   }) async {
-    emit(AuthLoading());
+    emit(const AuthLoading());
 
     try {
       final user = await repository.login(
@@ -47,26 +45,22 @@ class AuthCubit extends Cubit<AuthState> {
       );
 
       emit(AuthSuccess(user));
-    } on FirebaseAuthException catch (e) {
-      emit(AuthFailure(e.message ?? "Authentication failed"));
     } catch (e) {
       emit(AuthFailure(e.toString()));
     }
   }
 
   Future<void> resetPassword(String email) async {
-    emit(AuthLoading());
+    emit(const AuthLoading());
 
     try {
       await repository.resetPassword(email);
 
       emit(
         const AuthMessage(
-          "Password reset email has been sent.",
+          "Password reset email sent successfully.",
         ),
       );
-    } on FirebaseAuthException catch (e) {
-      emit(AuthFailure(e.message ?? "Failed to send email"));
     } catch (e) {
       emit(AuthFailure(e.toString()));
     }
@@ -74,6 +68,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> logout() async {
     await repository.logout();
-    emit(AuthInitial());
+
+    emit(const AuthInitial());
   }
 }

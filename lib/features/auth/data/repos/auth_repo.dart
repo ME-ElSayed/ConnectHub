@@ -1,24 +1,25 @@
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connect_hub/features/auth/data/repos/image_repo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+
 
 class AuthRepository {
   final FirebaseAuth _auth;
   final FirebaseFirestore _firestore;
-  final FirebaseStorage _storage;
+  final ImageRepository _imageRepository;
 
   AuthRepository({
     FirebaseAuth? auth,
     FirebaseFirestore? firestore,
-    FirebaseStorage? storage,
+    required ImageRepository imageRepository,
   })  : _auth = auth ?? FirebaseAuth.instance,
         _firestore = firestore ?? FirebaseFirestore.instance,
-        _storage = storage ?? FirebaseStorage.instance;
+        _imageRepository = imageRepository;
 
   User? get currentUser => _auth.currentUser;
 
-  
   Future<User> register({
     required String name,
     required String email,
@@ -32,20 +33,16 @@ class AuthRepository {
 
     final user = credential.user!;
 
-    final imageRef = _storage.ref("profile_images/${user.uid}.jpg");
-
-    await imageRef.putFile(image);
-
-    final photoUrl = await imageRef.getDownloadURL();
+    final imageUrl = await _imageRepository.uploadImage(image);
 
     await user.updateDisplayName(name);
-    await user.updatePhotoURL(photoUrl);
+    await user.updatePhotoURL(imageUrl);
 
     await _firestore.collection("users").doc(user.uid).set({
       "uid": user.uid,
       "name": name,
       "email": email,
-      "photoUrl": photoUrl,
+      "photoUrl": imageUrl,
       "createdAt": FieldValue.serverTimestamp(),
     });
 
@@ -54,7 +51,6 @@ class AuthRepository {
     return _auth.currentUser!;
   }
 
-  
   Future<User> login({
     required String email,
     required String password,
@@ -67,12 +63,10 @@ class AuthRepository {
     return credential.user!;
   }
 
-  
   Future<void> resetPassword(String email) async {
     await _auth.sendPasswordResetEmail(email: email);
   }
 
-  
   Future<void> logout() async {
     await _auth.signOut();
   }
