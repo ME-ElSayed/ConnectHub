@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PasswordField extends StatefulWidget {
+  final String? hintText;
+  final String? label;
   final TextEditingController passwordController;
   final String? Function(String?)? validator;
-  const PasswordField({super.key, required this.passwordController, this.validator});
+  const PasswordField({super.key, required this.passwordController, this.validator, this.hintText, this.label});
 
   @override
   State<PasswordField> createState() => _PasswordFieldState();
@@ -18,8 +20,8 @@ class _PasswordFieldState extends State<PasswordField> {
     return CustomTextFormField(
       validator: widget.validator,
       controller: widget.passwordController,
-      hintText: 'enter password',
-      label: 'Password',
+      hintText: widget.hintText ?? 'enter password',
+      label: widget.label ??   'Password',
       obscureText: obscureText,
       prefixIcon: Icon(Icons.lock_outline, size: 25.r),
       suffixIcon: (obscureText)

@@ -1,14 +1,12 @@
-import 'package:connect_hub/core/routing/routes.dart';
+import 'package:connect_hub/features/auth/presentation/widgets/auth_footer.dart';
+import 'package:connect_hub/features/auth/presentation/widgets/auth_header.dart';
+import 'package:connect_hub/features/auth/presentation/widgets/register_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-import '../widgets/auth_footer.dart';
-import '../widgets/auth_header.dart';
-import '../widgets/login_form_card.dart';
-
-class LoginView extends StatelessWidget {
-  const LoginView({super.key});
+class RegisterView extends StatelessWidget {
+  const RegisterView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +21,19 @@ class LoginView extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const AuthHeader(),
+                  const AuthHeader(
+                    title: 'Create Account',
+                    subtitle:
+                        'Enter your credentials below to create a new account.',
+                  ),
                   SizedBox(height: 32.h),
-                  LoginFormCard(),
+                  const RegisterCard(),
                   SizedBox(height: 32.h),
                   AuthFooter(
+                    message: 'Already have an account?',
+                    actionText: 'Login',
                     onActionTap: () {
-                      context.push(Routes.register);
+                      context.pop();
                     },
                   ),
                 ],
