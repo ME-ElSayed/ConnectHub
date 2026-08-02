@@ -36,6 +36,7 @@ class RegisterView extends StatelessWidget {
                       context.pop();
                     },
                   ),
+                  SizedBox(height: 24.h),
                 ],
               ),
             ),

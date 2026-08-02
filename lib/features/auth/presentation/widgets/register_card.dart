@@ -1,11 +1,13 @@
 import 'package:connect_hub/core/extensions/form_auth_scroll.dart';
 import 'package:connect_hub/core/theme/app_styles.dart';
+import 'package:connect_hub/core/utils/app_assets.dart';
 import 'package:connect_hub/core/utils/app_validator.dart';
 import 'package:connect_hub/core/utils/validation_types.dart';
 import 'package:connect_hub/core/widgets/app_button.dart';
 import 'package:connect_hub/core/widgets/custom_text_form_field.dart';
 import 'package:connect_hub/features/auth/presentation/widgets/custom_container.dart';
 import 'package:connect_hub/features/auth/presentation/widgets/password_field.dart';
+import 'package:connect_hub/features/auth/presentation/widgets/profile_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -36,6 +38,15 @@ class _RegisterCardState extends State<RegisterCard> {
             Text(
               'Enter your credentials below',
               style: AppStyles.body14SecondaryRegular,
+            ),
+            SizedBox(height: 15.h),
+            Center(
+              child: ProfileAvatar(
+                isLoading: false,
+                image: Image.asset(AppAssets.avatar, fit: BoxFit.cover),
+                icon: Icons.camera_alt_outlined,
+                onPressed: () {},
+              ),
             ),
             SizedBox(height: 24.h),
             CustomTextFormField(
