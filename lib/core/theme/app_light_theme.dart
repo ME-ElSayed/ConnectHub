@@ -79,9 +79,9 @@ class AppLightTheme {
           elevation: 0,
           shadowColor: AppColors.primaryOverlay25,
           minimumSize: const Size.fromHeight(48),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+           padding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
           ),
           textStyle: textTheme.labelLarge,
         ),

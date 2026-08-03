@@ -53,15 +53,6 @@ class AppButton extends StatelessWidget {
         height: height.h,
         child: ElevatedButton(
           onPressed: isEnabled ? onPressed : null,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: backgroundColor,
-            foregroundColor: foregroundColor,
-            elevation: 0,
-            padding: EdgeInsets.zero,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(borderRadius.r),
-            ),
-          ),
           child: isLoading
               ? SizedBox(
                   width: 25.r,
