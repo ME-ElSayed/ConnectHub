@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:connect_hub/core/routing/routes.dart';
 import 'package:connect_hub/core/theme/app_styles.dart';
 import 'package:connect_hub/core/utils/app_validator.dart';
 import 'package:connect_hub/core/utils/show_message.dart';
@@ -13,6 +14,7 @@ import 'package:connect_hub/features/auth/presentation/widgets/profile_avatar.da
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 class RegisterCard extends StatefulWidget {
   const RegisterCard({super.key});
@@ -131,6 +133,7 @@ class _RegisterCardState extends State<RegisterCard> {
                     Colors.green,
                     Colors.white,
                   );
+                  context.go(Routes.homeFeed);
                 }
               },
               builder: (context, state) {
