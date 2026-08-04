@@ -22,22 +22,15 @@ class ChatMessagesList extends StatelessWidget {
       child: ListView.separated(
         controller: controller,
         physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.fromLTRB(
-          16.w,
-          12.h,
-          16.w,
-          20.h,
-        ),
+        padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 20.h),
         itemCount: messages.length + (isTyping ? 1 : 0),
         separatorBuilder: (_, _) => SizedBox(height: 10.h),
         itemBuilder: (_, index) {
           if (index == messages.length) {
             return const ChatTypingIndicator();
           }
-
-          return ChatBubble(
-            message: messages[index],
-          );
+      
+          return ChatBubble(message: messages[index]);
         },
       ),
     );

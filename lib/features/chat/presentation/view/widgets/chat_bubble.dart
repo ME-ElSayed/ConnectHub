@@ -26,7 +26,7 @@ class ChatBubble extends StatelessWidget {
           color: _bubbleColor(colors),
           borderRadius: _borderRadius,
         ),
-        child: SelectableText(
+        child: Text(
           message.text,
           style: AppStyles.body14Regular.copyWith(
             color: _textColor(colors),
