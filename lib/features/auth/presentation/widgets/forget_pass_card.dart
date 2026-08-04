@@ -49,7 +49,7 @@ class _ForgetPassCardState extends State<ForgetPassCard> {
             SizedBox(height: 20.h),
             BlocConsumer<AuthCubit, AuthState>(
               listener: (context, state) {
-                if (state is AuthSuccess) {
+                if (state is ResetPasswordSuccess) {
                   showMessage(
                     context,
                     "sending",

@@ -96,7 +96,7 @@ class _LoginFormCardState extends State<LoginFormCard> {
             SizedBox(height: 24.h),
             BlocConsumer<AuthCubit, AuthState>(
               listener: (context, state) {
-                if (state is AuthSuccess) {
+                if (state is LoginSuccess) {
                   context.go(Routes.home);
                 } else if (state is AuthFailure) {
                   showMessage(

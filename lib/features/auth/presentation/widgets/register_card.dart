@@ -126,7 +126,7 @@ class _RegisterCardState extends State<RegisterCard> {
                     Colors.red,
                     Colors.white,
                   );
-                } else if (state is AuthSuccess) {
+                } else if (state is RegisterSuccess) {
                   showMessage(
                     context,
                     'Registration Successful',

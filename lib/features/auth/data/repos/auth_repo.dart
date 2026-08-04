@@ -1,73 +1,85 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connect_hub/core/services/auth_service.dart';
+import 'package:connect_hub/core/services/firestore_service.dart';
+import 'package:connect_hub/features/auth/data/models/user_model.dart';
 import 'package:connect_hub/features/auth/data/repos/image_repo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 class AuthRepository {
-  final FirebaseAuth _auth;
-  final FirebaseFirestore _firestore;
+  AuthRepository({
+    required AuthService authService,
+    required FirestoreService firestoreService,
+    required ImageRepository imageRepository,
+  }) : _authService = authService,
+       _firestoreService = firestoreService,
+       _imageRepository = imageRepository;
+
+  final AuthService _authService;
+  final FirestoreService _firestoreService;
   final ImageRepository _imageRepository;
 
-  AuthRepository({
-    FirebaseAuth? auth,
-    FirebaseFirestore? firestore,
-    required ImageRepository imageRepository,
-  })  : _auth = auth ?? FirebaseAuth.instance,
-        _firestore = firestore ?? FirebaseFirestore.instance,
-        _imageRepository = imageRepository;
+  User? get currentUser => _authService.currentUser;
 
-  User? get currentUser => _auth.currentUser;
+  AppUser? get currentAppUser {
+    final user = _authService.currentUser;
+    if (user == null) return null;
 
-  Future<User> register({
+    return AppUser.fromFirebaseUser(user);
+  }
+
+  Future<AppUser> register({
     required String name,
     required String email,
     required String password,
     required File image,
   }) async {
-    final credential = await _auth.createUserWithEmailAndPassword(
+    final credential = await _authService.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
 
     final user = credential.user!;
-
     final imageUrl = await _imageRepository.uploadImage(image);
 
     await user.updateDisplayName(name);
     await user.updatePhotoURL(imageUrl);
 
-    await _firestore.collection("users").doc(user.uid).set({
-      "uid": user.uid,
-      "name": name,
-      "email": email,
-      "photoUrl": imageUrl,
-      "createdAt": FieldValue.serverTimestamp(),
-    });
+    final appUser = AppUser(
+      uid: user.uid,
+      name: name,
+      email: email,
+      photoUrl: imageUrl,
+      createdAt: DateTime.now(),
+    );
 
+    await _firestoreService.setUserData(appUser);
     await user.reload();
 
-    return _auth.currentUser!;
+    return AppUser.fromFirebaseUser(_authService.currentUser!);
   }
 
-  Future<User> login({
+  Future<AppUser> login({
     required String email,
     required String password,
   }) async {
-    final credential = await _auth.signInWithEmailAndPassword(
+    final credential = await _authService.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
 
-    return credential.user!;
+    return AppUser.fromFirebaseUser(credential.user!);
+  }
+
+  Future<AppUser?> getUserData(String uid) async {
+    return _firestoreService.getUser(uid);
   }
 
   Future<void> resetPassword(String email) async {
-    await _auth.sendPasswordResetEmail(email: email);
+    await _authService.sendPasswordResetEmail(email: email);
   }
 
   Future<void> logout() async {
-    await _auth.signOut();
+    await _authService.signOut();
   }
 }

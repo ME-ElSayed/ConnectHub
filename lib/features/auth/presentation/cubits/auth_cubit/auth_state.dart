@@ -1,3 +1,4 @@
+import 'package:connect_hub/features/auth/data/models/user_model.dart';
 
 sealed class AuthState {
   const AuthState();
@@ -11,8 +12,24 @@ class AuthLoading extends AuthState {
   const AuthLoading();
 }
 
-class AuthSuccess extends AuthState {
- const AuthSuccess();
+class LoginSuccess extends AuthState {
+  final AppUser user;
+
+  const LoginSuccess({required this.user});
+}
+
+class RegisterSuccess extends AuthState {
+  final AppUser user;
+
+  const RegisterSuccess({required this.user});
+}
+
+class ResetPasswordSuccess extends AuthState {
+  const ResetPasswordSuccess();
+}
+
+class LogoutSuccess extends AuthState {
+  const LogoutSuccess();
 }
 
 class AuthFailure extends AuthState {
@@ -20,4 +37,3 @@ class AuthFailure extends AuthState {
 
   const AuthFailure({required this.message});
 }
-

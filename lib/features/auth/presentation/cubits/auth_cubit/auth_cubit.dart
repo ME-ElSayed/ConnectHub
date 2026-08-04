@@ -20,14 +20,14 @@ class AuthCubit extends Cubit<AuthState> {
     emit(const AuthLoading());
 
     try {
-      await repository.register(
+      final user = await repository.register(
         name: name,
         email: email,
         password: password,
         image: image,
       );
 
-      emit(AuthSuccess());
+      emit(RegisterSuccess(user: user));
     } on FirebaseAuthException catch (e) {
       emit(AuthFailure(message: _authErrorMessage(e)));
     } catch (e) {
@@ -35,13 +35,19 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> login({required String email, required String password}) async {
+  Future<void> login({
+    required String email,
+    required String password,
+  }) async {
     emit(const AuthLoading());
 
     try {
-      await repository.login(email: email, password: password);
+      final user = await repository.login(
+        email: email,
+        password: password,
+      );
 
-      emit(AuthSuccess());
+      emit(LoginSuccess(user: user));
     } on FirebaseAuthException catch (e) {
       emit(AuthFailure(message: _authErrorMessage(e)));
     } catch (e) {
@@ -49,13 +55,15 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> resetPassword({required String email}) async {
+  Future<void> resetPassword({
+    required String email,
+  }) async {
     emit(const AuthLoading());
 
     try {
       await repository.resetPassword(email);
 
-      emit(const AuthSuccess());
+      emit(const ResetPasswordSuccess());
     } on FirebaseAuthException catch (e) {
       emit(AuthFailure(message: _authErrorMessage(e)));
     } catch (e) {
@@ -68,7 +76,8 @@ class AuthCubit extends Cubit<AuthState> {
 
     try {
       await repository.logout();
-      emit(const AuthSuccess());
+
+      emit(const LogoutSuccess());
     } catch (e) {
       emit(AuthFailure(message: e.toString()));
     }
@@ -80,18 +89,25 @@ class AuthCubit extends Cubit<AuthState> {
       case 'user-not-found':
       case 'wrong-password':
         return 'Wrong email or password';
+
       case 'weak-password':
         return 'The password provided is too weak';
+
       case 'email-already-in-use':
         return 'The account already exists for that email';
+
       case 'invalid-email':
         return 'Please enter a valid email address';
+
       case 'user-disabled':
         return 'This account has been disabled';
+
       case 'requires-recent-login':
         return 'Please sign in again to delete this account';
+
       default:
-        return exception.message ?? 'Authentication failed. Please try again.';
+        return exception.message ??
+            'Authentication failed. Please try again.';
     }
   }
 }
