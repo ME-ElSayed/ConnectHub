@@ -1,3 +1,4 @@
+import 'package:connect_hub/core/theme/app_colors.dart';
 import 'package:connect_hub/core/utils/hide_nav_bar.dart';
 import 'package:connect_hub/features/chat/presentation/views/chat_view.dart';
 import 'package:connect_hub/features/feed/presentation/view/home_feed_view.dart';
@@ -29,26 +30,26 @@ class _MainScreenState extends State<MainScreen> {
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.home),
         title: "Home",
-        activeColorPrimary: Colors.blue,
-        inactiveColorPrimary: Colors.grey,
+        activeColorPrimary: AppColors.primary,
+        inactiveColorPrimary: AppColors.neutral500,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.add),
         title: "post",
-        activeColorPrimary: Colors.blue,
-        inactiveColorPrimary: Colors.grey,
+        activeColorPrimary: AppColors.primary,
+        inactiveColorPrimary: AppColors.neutral500,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.chat),
         title: "chat",
-        activeColorPrimary: Colors.blue,
-        inactiveColorPrimary: Colors.grey,
+        activeColorPrimary: AppColors.primary,
+        inactiveColorPrimary: AppColors.neutral500,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(Icons.person),
+        icon: const Icon(Icons.person_outlined),
         title: "Profile",
-        activeColorPrimary: Colors.blue,
-        inactiveColorPrimary: Colors.grey,
+        activeColorPrimary: AppColors.primary,
+        inactiveColorPrimary: AppColors.neutral500,
       ),
     ];
   }
@@ -70,10 +71,7 @@ class _MainScreenState extends State<MainScreen> {
         items: _navBarsItems(),
 
         navBarHeight: (value) ? 80.h : 0,
-        margin: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 20.h),
-
         decoration: NavBarDecoration(
-          borderRadius: BorderRadius.circular(20.r),
           colorBehindNavBar: Colors.transparent,
           boxShadow: [
             BoxShadow(
