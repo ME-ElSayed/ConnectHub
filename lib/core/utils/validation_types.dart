@@ -5,6 +5,7 @@ enum ValidationType {
   phone,
   password,
   confirmPassword,
-  
+  title,
+  content,
   
 }

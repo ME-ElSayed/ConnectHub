@@ -1,6 +1,5 @@
 import 'package:connect_hub/core/utils/validation_types.dart';
 
-
 class AppValidator {
   static String? validate({
     required String value,
@@ -63,14 +62,16 @@ class AppValidator {
         }
         break;
 
-      
       case ValidationType.fullname:
         if (!nameRegex.hasMatch(value)) {
           return 'Enter a valid name';
         }
 
+      case ValidationType.title:
         break;
-      
+        
+        case ValidationType.content:
+        break;
     }
 
     return null;

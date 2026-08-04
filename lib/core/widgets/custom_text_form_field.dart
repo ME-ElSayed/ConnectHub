@@ -17,6 +17,7 @@ class CustomTextFormField extends StatelessWidget {
     this.onChanged,
     this.onSubmit,
     this.onSuffixIconPressed,
+    this.maxlines,
   });
 
   final String label;
@@ -32,6 +33,7 @@ class CustomTextFormField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final void Function(String)? onSubmit;
   final VoidCallback? onSuffixIconPressed;
+  final int? maxlines;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +55,8 @@ class CustomTextFormField extends StatelessWidget {
           onFieldSubmitted: onSubmit,
           cursorColor: theme.colorScheme.primary,
           style: theme.textTheme.bodyLarge,
-          
+          maxLines: maxlines,
+
           decoration: InputDecoration(
             hintText: hintText,
             prefixIcon: prefixIcon == null
