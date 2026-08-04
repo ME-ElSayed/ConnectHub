@@ -5,7 +5,9 @@ class Routes {
   static const String login = '/login';
   static const String forgetPassword = '/forget_password';
   static const String register = '/register';
-  static const String homeFeed = '/home-feed';
+
+  static const String home = '/home';
+  
 }
 
 class RouteNames {
@@ -15,5 +17,7 @@ class RouteNames {
   static const String login = 'login';
   static const String forgetPassword = 'forget-password';
   static const String register = 'register';
-  static const String homeFeed = 'home_feed';
+
+  static const String home = 'home';
+  
 }

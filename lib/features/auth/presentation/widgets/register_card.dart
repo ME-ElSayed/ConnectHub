@@ -133,7 +133,7 @@ class _RegisterCardState extends State<RegisterCard> {
                     Colors.green,
                     Colors.white,
                   );
-                  context.go(Routes.homeFeed);
+                  context.go(Routes.home);
                 }
               },
               builder: (context, state) {
