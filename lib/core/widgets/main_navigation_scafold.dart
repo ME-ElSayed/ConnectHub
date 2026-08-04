@@ -1,6 +1,6 @@
 import 'package:connect_hub/core/theme/app_colors.dart';
 import 'package:connect_hub/core/utils/hide_nav_bar.dart';
-import 'package:connect_hub/features/chat/presentation/views/chat_view.dart';
+import 'package:connect_hub/features/chat/presentation/view/chat_screen.dart';
 import 'package:connect_hub/features/feed/presentation/view/home_feed_view.dart';
 import 'package:connect_hub/features/post/presentation/views/add_post_view.dart';
 import 'package:connect_hub/features/profile/presentation/views/profile_view.dart';
