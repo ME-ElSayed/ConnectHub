@@ -7,12 +7,14 @@ class FeedCardImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppCachedImage(
-      imageUrl:
-          "https://i.ibb.co/SXrF9sL1/image-cropper-1785691682814.jpg",
-      width: double.infinity,
-      fit: BoxFit.cover,
-      borderRadius: BorderRadius.circular(20.r),
+    return AspectRatio(
+      aspectRatio: 1.56,
+      child: AppCachedImage(
+        imageUrl: "https://i.ibb.co/SXrF9sL1/image-cropper-1785691682814.jpg",
+        width: double.infinity,
+        fit: BoxFit.cover,
+        borderRadius: BorderRadius.circular(20.r),
+      ),
     );
   }
 }
