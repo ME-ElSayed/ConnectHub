@@ -1,3 +1,4 @@
+import 'package:connect_hub/core/extensions/form_auth_scroll.dart';
 import 'package:connect_hub/core/utils/app_validator.dart';
 import 'package:connect_hub/core/utils/validation_types.dart';
 import 'package:connect_hub/core/widgets/app_button.dart';
@@ -65,7 +66,7 @@ class _AddPostViewState extends State<AddPostView> {
                     foregroundColor: Colors.blue,
                     text: 'Post',
                     onPressed: () {
-                      if (formKey.currentState!.validate()) {}
+                      if (formKey.validateAndScroll()) {}
                     },
                   ),
                   SizedBox(height: 16.h),

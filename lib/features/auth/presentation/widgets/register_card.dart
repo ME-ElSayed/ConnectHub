@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:connect_hub/core/extensions/form_auth_scroll.dart';
 import 'package:connect_hub/core/routing/routes.dart';
 import 'package:connect_hub/core/theme/app_styles.dart';
 import 'package:connect_hub/core/utils/app_validator.dart';
@@ -144,7 +145,7 @@ class _RegisterCardState extends State<RegisterCard> {
                   onPressed: state is AuthLoading
                       ? null
                       : () {
-                          if (formKey.currentState!.validate()) {
+                          if (formKey.validateAndScroll()) {
                             if (avatarFile == null) {
                               showMessage(
                                 context,

@@ -55,7 +55,7 @@ class CustomTextFormField extends StatelessWidget {
           onFieldSubmitted: onSubmit,
           cursorColor: theme.colorScheme.primary,
           style: theme.textTheme.bodyLarge,
-          maxLines: maxlines,
+           maxLines: obscureText ? 1 : (maxlines ?? 1),
 
           decoration: InputDecoration(
             hintText: hintText,

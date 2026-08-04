@@ -1,3 +1,4 @@
+import 'package:connect_hub/core/extensions/form_auth_scroll.dart';
 import 'package:connect_hub/core/routing/routes.dart';
 import 'package:connect_hub/core/utils/app_validator.dart';
 import 'package:connect_hub/core/utils/show_message.dart';
@@ -115,7 +116,7 @@ class _LoginFormCardState extends State<LoginFormCard> {
                   onPressed: state is AuthLoading
                       ? null
                       : () {
-                          if (formKey.currentState!.validate()) {
+                          if (formKey.validateAndScroll()) {
                             context.read<AuthCubit>().login(
                               email: emailController.text.trim(),
                               password: passwordController.text,
