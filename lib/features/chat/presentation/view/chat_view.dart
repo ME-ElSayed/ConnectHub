@@ -69,6 +69,15 @@ class _ChatViewState extends State<ChatView> {
           body: SafeArea(
             child: Column(
               children: [
+                if (state.isLoadingHistory)
+                  const Padding(
+                    padding: EdgeInsets.only(top: 12),
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  ),
                 Expanded(
                   child: ChatMessagesList(
                     controller: _scrollController,

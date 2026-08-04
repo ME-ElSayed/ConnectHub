@@ -1,10 +1,16 @@
+import 'package:connect_hub/core/di/service_locator.dart';
+import 'package:connect_hub/core/services/auth_service.dart';
+import 'package:connect_hub/core/services/firestore_service.dart';
 import 'package:connect_hub/core/theme/app_colors.dart';
 import 'package:connect_hub/core/utils/hide_nav_bar.dart';
+import 'package:connect_hub/features/chat/data/repo/chat_repo.dart';
+import 'package:connect_hub/features/chat/presentation/cubit/chat_cubit.dart';
 import 'package:connect_hub/features/chat/presentation/view/chat_view.dart';
 import 'package:connect_hub/features/feed/presentation/view/home_feed_view.dart';
 import 'package:connect_hub/features/post/presentation/views/add_post_view.dart';
 import 'package:connect_hub/features/profile/presentation/views/profile_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
@@ -65,7 +71,7 @@ class _MainScreenState extends State<MainScreen> {
         screens: [
           HomeFeedView(controller: hiding),
           const AddPostView(),
-          const ChatView(),
+          _buildChatScreen(),
           const ProfileView(),
         ],
         items: _navBarsItems(),
@@ -99,6 +105,25 @@ class _MainScreenState extends State<MainScreen> {
 
         navBarStyle: NavBarStyle.style1,
       ),
+    );
+  }
+
+  Widget _buildChatScreen() {
+    final uid = getIt<AuthService>().currentUser?.uid;
+
+    if (uid == null) {
+      return const Scaffold(
+        body: Center(child: Text('Please sign in to use chat.')),
+      );
+    }
+
+    return BlocProvider(
+      create: (_) => ChatCubit(
+        repo: getIt<ChatRepo>(),
+        firestoreService: getIt<FirestoreService>(),
+        uid: uid,
+      ),
+      child: const ChatView(),
     );
   }
 }

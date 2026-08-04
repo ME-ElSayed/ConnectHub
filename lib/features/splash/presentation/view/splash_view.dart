@@ -27,7 +27,7 @@ class _SplashViewState extends State<SplashView> {
     super.initState();
     _timer = Timer(AppConstants.splashDuration, () {
       if (mounted) {
-        context.go(Routes.home);
+        context.go(Routes.login);
       }
     });
   }

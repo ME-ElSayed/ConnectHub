@@ -1,6 +1,5 @@
 import 'package:connect_hub/core/di/service_locator.dart';
 import 'package:connect_hub/features/auth/presentation/cubits/auth_cubit/auth_cubit.dart';
-import 'package:connect_hub/features/chat/presentation/cubit/chat_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,10 +33,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return MultiBlocProvider(
-          providers: [
-            BlocProvider(create: (_) => getIt<AuthCubit>()),
-            BlocProvider(create: (_) => getIt<ChatCubit>()),
-          ],
+          providers: [BlocProvider(create: (_) => getIt<AuthCubit>())],
           child: MaterialApp.router(
             debugShowCheckedModeBanner: false,
             title: 'ConnectHub',

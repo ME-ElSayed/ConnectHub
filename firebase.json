@@ -1,1 +1,25 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"connecthub-36009","appId":"1:1098563510996:android:113778d4de0bdc95f79141","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"connecthub-36009","configurations":{"android":"1:1098563510996:android:113778d4de0bdc95f79141","ios":"1:1098563510996:ios:af214a4e7b9fe599f79141"}}}}}}
+{
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "connecthub-36009",
+          "appId": "1:1098563510996:android:113778d4de0bdc95f79141",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "connecthub-36009",
+          "configurations": {
+            "android": "1:1098563510996:android:113778d4de0bdc95f79141",
+            "ios": "1:1098563510996:ios:af214a4e7b9fe599f79141"
+          }
+        }
+      }
+    }
+  }
+}
