@@ -9,7 +9,8 @@ class AppButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.onPressed,
-    this.height = 60,
+    this.height,
+    this.width,
     this.borderRadius = 12,
     this.backgroundColor = AppColors.primary,
     this.foregroundColor = AppColors.textOnPrimary,
@@ -18,7 +19,8 @@ class AppButton extends StatelessWidget {
 
   final String text;
   final VoidCallback? onPressed;
-  final double height;
+  final double? height;
+  final double? width;
   final double borderRadius;
   final Color backgroundColor;
   final Color foregroundColor;
@@ -49,10 +51,11 @@ class AppButton extends StatelessWidget {
             : null,
       ),
       child: SizedBox(
-        width: double.infinity,
-        height: height.h,
+        width: width ?? double.infinity,
+        height: height ?? 56.h,
         child: ElevatedButton(
           onPressed: isEnabled ? onPressed : null,
+          style: ElevatedButton.styleFrom(backgroundColor: backgroundColor),
           child: isLoading
               ? SizedBox(
                   width: 25.r,

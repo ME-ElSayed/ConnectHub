@@ -41,7 +41,6 @@ class DioFactory {
 
   static BaseOptions get _baseOptions {
     return BaseOptions(
-      baseUrl: ApiConstants.baseUrl,
       connectTimeout: ApiConstants.connectTimeout,
       receiveTimeout: ApiConstants.receiveTimeout,
       sendTimeout: ApiConstants.sendTimeout,

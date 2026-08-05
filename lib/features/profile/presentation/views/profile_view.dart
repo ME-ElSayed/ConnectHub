@@ -10,20 +10,24 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: ProfileHeader(
-                name: "sia",
-                imageUrl:
-                    "https://i.ibb.co/SXrF9sL1/image-cropper-1785691682814.jpg",
-                isLoggingOut: true,
-                onLogout: () {},
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: ProfileHeader(
+                  name: "sia",
+                  imageUrl:
+                      "https://i.ibb.co/SXrF9sL1/image-cropper-1785691682814.jpg",
+                  isLoggingOut: true,
+                  onLogout: () {},
+                ),
               ),
-            ),
-            SliverToBoxAdapter(child: SizedBox(height: 16.h)),
-            ProfilePostsGrid(),
-          ],
+              SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+              ProfilePostsGrid(),
+              SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+            ],
+          ),
         ),
       ),
     );

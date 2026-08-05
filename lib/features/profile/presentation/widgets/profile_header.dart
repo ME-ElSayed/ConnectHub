@@ -42,6 +42,7 @@ class ProfileHeader extends StatelessWidget {
         ),
         SizedBox(height: 20.h),
         AppButton(
+          width: 200.w,
           backgroundColor: Colors.red,
           foregroundColor: Colors.red,
           text: "logout",
