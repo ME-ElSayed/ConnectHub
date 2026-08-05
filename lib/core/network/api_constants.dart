@@ -9,7 +9,6 @@ class ApiConstants {
   static const String authorizationHeader = 'Authorization';
   static const String bearer = 'Bearer';
   static const String applicationJson = 'application/json';
-  static final String baseUrl = (dotenv.env['BASE_URL'] ?? '').trim();
   static final String n8nChatWebhookUrl =
       (dotenv.env['N8N_CHAT_WEBHOOK_URL'] ?? '').trim();
 }
