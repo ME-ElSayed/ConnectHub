@@ -70,7 +70,7 @@ class _MainScreenState extends State<MainScreen> {
         isVisible: value,
         screens: [
           HomeFeedView(controller: hiding),
-          const AddPostView(),
+           AddPostView(onPosted: () => _controller.jumpToTab(0),),
           _buildChatScreen(),
           const ProfileView(),
         ],

@@ -7,35 +7,28 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class PostImage extends StatefulWidget {
-  const PostImage({super.key, this.imageUrl, this.onImageChanged});
+class PostImage extends StatelessWidget {
+  const PostImage({
+    super.key,
+    this.imageUrl,
+    this.selectedImage,
+    required this.onImageChanged,
+  });
 
   final String? imageUrl;
-  final ValueChanged<File?>? onImageChanged;
+  final File? selectedImage;
+  final ValueChanged<File?> onImageChanged;
 
-  @override
-  State<PostImage> createState() => _PostImageState();
-}
-
-class _PostImageState extends State<PostImage> {
-  File? _pickedImage;
-
-  Future<void> _pickImage() async {
+  Future<void> _pickImage(BuildContext context) async {
     final image = await ImageService.pickAndCropImage(context);
-
     if (image == null) return;
-
-    setState(() {
-      _pickedImage = image;
-    });
-
-    widget.onImageChanged?.call(image);
+    onImageChanged(image);
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: _pickImage,
+      onTap: () => _pickImage(context),
       child: SizedBox(
         height: 200.h,
         width: double.infinity,
@@ -45,18 +38,18 @@ class _PostImageState extends State<PostImage> {
   }
 
   Widget _buildContent(BuildContext context) {
-    if (_pickedImage != null) {
+    if (selectedImage != null) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(8.r),
-        child: Image.file(_pickedImage!, fit: BoxFit.cover),
+        child: Image.file(selectedImage!, fit: BoxFit.cover),
       );
     }
 
-    if (widget.imageUrl != null && widget.imageUrl!.isNotEmpty) {
+    if (imageUrl != null && imageUrl!.isNotEmpty) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(8.r),
         child: CachedNetworkImage(
-          imageUrl: widget.imageUrl!,
+          imageUrl: imageUrl!,
           fit: BoxFit.cover,
           width: double.infinity,
           placeholder: (context, url) =>

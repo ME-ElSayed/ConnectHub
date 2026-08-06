@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connect_hub/core/constant/app_constants.dart';
 import 'package:connect_hub/features/auth/data/models/user_model.dart';
 import 'package:connect_hub/features/chat/data/model/chat_message.dart';
+import 'package:connect_hub/features/post/data/models/post_model.dart';
 
 class FirestoreService {
   FirestoreService({FirebaseFirestore? firestore})
@@ -57,6 +59,14 @@ class FirestoreService {
               .map((doc) => ChatMessage.fromMap(doc.data(), id: doc.id))
               .toList(),
         );
+  }
+
+  Future<void> addPost(PostModel post) async {
+    final postsCollection = _firestore.collection(AppConstants.postsCollection);
+    final doc = post.id == null
+        ? postsCollection.doc()
+        : postsCollection.doc(post.id);
+    await doc.set(post.copyWith(id: doc.id).toMap());
   }
 
   CollectionReference<Map<String, dynamic>> _chatMessages(

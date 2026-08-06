@@ -4,6 +4,8 @@ import 'package:connect_hub/features/auth/data/repos/auth_repo.dart';
 import 'package:connect_hub/features/auth/data/repos/image_repo.dart';
 import 'package:connect_hub/features/auth/presentation/cubits/auth_cubit/auth_cubit.dart';
 import 'package:connect_hub/features/chat/data/repo/chat_repo.dart';
+import 'package:connect_hub/features/post/data/repos/post_repo.dart';
+import 'package:connect_hub/features/post/presentation/cubits/post_cubit/post_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
@@ -24,6 +26,18 @@ Future<void> setupLocator() async {
   );
 
   getIt.registerLazySingleton<ChatRepo>(() => ChatRepo(getIt()));
+  getIt.registerLazySingleton<PostRepository>(
+    () => PostRepository(
+      firestoreService: getIt<FirestoreService>(),
+      imageRepository: getIt<ImageRepository>(),
+    ),
+  );
 
   getIt.registerFactory<AuthCubit>(() => AuthCubit(getIt()));
+  getIt.registerFactory<PostCubit>(
+    () => PostCubit(
+      repository: getIt<PostRepository>(),
+      authService: getIt<AuthService>(),
+    ),
+  );
 }

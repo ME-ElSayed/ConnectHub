@@ -11,17 +11,17 @@ class FeedCardContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "title",
-          style: AppStyles.title20SemiBold.copyWith(
-            fontSize: 21.sp,
-          ),
+          "title ",
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: AppStyles.title20SemiBold.copyWith(fontSize: 21.sp),
         ),
         SizedBox(height: 6.h),
         Text(
-          "content",
-          style: AppStyles.body16Regular.copyWith(
-            height: 1.4,
-          ),
+          "content ",
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: AppStyles.body16Regular.copyWith(height: 1.4),
         ),
       ],
     );
