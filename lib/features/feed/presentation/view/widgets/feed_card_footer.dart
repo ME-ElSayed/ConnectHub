@@ -1,11 +1,11 @@
 import 'package:connect_hub/core/di/service_locator.dart';
-import 'package:connect_hub/core/theme/app_colors.dart';
-import 'package:connect_hub/core/theme/app_styles.dart';
-import 'package:connect_hub/core/utils/time_ago.dart';
-import 'package:connect_hub/features/feed/presentation/view/comment_screen.dart';
-import 'package:connect_hub/features/feed/presentation/view/widgets/likes_bottom_sheet.dart';
-import 'package:connect_hub/features/feed/presentation/cubits/like_state.dart';
 import 'package:connect_hub/features/feed/presentation/cubits/like_cubit.dart';
+import 'package:connect_hub/features/feed/presentation/cubits/like_state.dart';
+import 'package:connect_hub/features/feed/presentation/view/comment_screen.dart';
+import 'package:connect_hub/features/feed/presentation/view/widgets/comment_button.dart';
+import 'package:connect_hub/features/feed/presentation/view/widgets/like_button.dart';
+import 'package:connect_hub/features/feed/presentation/view/widgets/likes_bottom_sheet.dart';
+import 'package:connect_hub/features/feed/presentation/view/widgets/post_time_label.dart';
 import 'package:connect_hub/features/post/data/models/post_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,12 +21,14 @@ class FeedCardFooter extends StatefulWidget {
 }
 
 class _FeedCardFooterState extends State<FeedCardFooter> {
-  late final LikeCubit _likeViewModel;
+  late final LikeCubit _likeCubit;
 
   @override
   void initState() {
     super.initState();
-    _likeViewModel = getIt<LikeCubit>();
+
+    _likeCubit = getIt<LikeCubit>();
+
     _loadLikeStatus();
   }
 
@@ -42,7 +44,7 @@ class _FeedCardFooterState extends State<FeedCardFooter> {
 
   @override
   void dispose() {
-    _likeViewModel.close();
+    _likeCubit.close();
     super.dispose();
   }
 
@@ -53,7 +55,7 @@ class _FeedCardFooterState extends State<FeedCardFooter> {
       return;
     }
 
-    _likeViewModel.loadLikeStatus(
+    _likeCubit.loadLikeStatus(
       postId: postId,
       initialLikesCount: widget.post.likesCount,
     );
@@ -64,7 +66,7 @@ class _FeedCardFooterState extends State<FeedCardFooter> {
     final postId = widget.post.id;
 
     return BlocProvider.value(
-      value: _likeViewModel,
+      value: _likeCubit,
       child: BlocConsumer<LikeCubit, LikeState>(
         listener: (context, state) {
           if (state.status == LikeStatus.error && state.errorMessage != null) {
@@ -74,70 +76,41 @@ class _FeedCardFooterState extends State<FeedCardFooter> {
           }
         },
         builder: (context, state) {
-          final likesCount = state.likesCount;
-          final isLiked = state.isLiked;
-
           return Row(
             children: [
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: postId == null
+              LikeButton(
+                isLiked: state.isLiked,
+                likesCount: state.likesCount,
+                onLike: postId == null
                     ? null
-                    : () =>
-                          context.read<LikeCubit>().toggleLike(postId: postId),
-                child: Icon(
-                  isLiked
-                      ? Icons.favorite_rounded
-                      : Icons.favorite_border_rounded,
-                  size: 22.sp,
-                  color: isLiked ? Colors.redAccent : AppColors.textSecondary,
-                ),
-              ),
-              SizedBox(width: 6.w),
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: postId == null
+                    : () {
+                        context.read<LikeCubit>().toggleLike(postId: postId);
+                      },
+                onCountTap: postId == null
                     ? null
-                    : () => showLikesBottomSheet(
-                        context: context,
-                        postId: postId,
-                      ),
-                child: Text(
-                  '$likesCount',
-                  style: AppStyles.body14SecondaryRegular,
-                ),
+                    : () {
+                        showLikesBottomSheet(context: context, postId: postId);
+                      },
               ),
+
               SizedBox(width: 16.w),
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
+
+              CommentButton(
+                commentsCount: widget.post.commentsCount,
                 onTap: postId == null
                     ? null
-                    : () => Navigator.of(context).push(
-                        MaterialPageRoute<void>(
-                          builder: (_) => CommentScreen(post: widget.post),
-                        ),
-                      ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.mode_comment_outlined,
-                      size: 22.sp,
-                      color: AppColors.textSecondary,
-                    ),
-                    SizedBox(width: 6.w),
-                    Text(
-                      '${widget.post.commentsCount}',
-                      style: AppStyles.body14SecondaryRegular,
-                    ),
-                  ],
-                ),
+                    : () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => CommentScreen(post: widget.post),
+                          ),
+                        );
+                      },
               ),
+
               const Spacer(),
-              Text(
-                timeAgo(widget.post.createdAt),
-                style: AppStyles.body14SecondaryRegular,
-              ),
+
+              PostTimeLabel(createdAt: widget.post.createdAt),
             ],
           );
         },

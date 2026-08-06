@@ -1,6 +1,6 @@
-import 'package:connect_hub/core/theme/app_colors.dart';
 import 'package:connect_hub/core/theme/app_styles.dart';
 import 'package:connect_hub/features/feed/presentation/view/widgets/profile_pic.dart';
+import 'package:connect_hub/features/feed/presentation/view/widgets/you_badge.dart';
 import 'package:connect_hub/features/post/data/models/post_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,19 +17,25 @@ class FeedCardHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final displayName = _displayName;
-    final username = _username;
+    final displayName = _displayName(post);
+    final username = _username(post);
 
     return Row(
       children: [
-        ProfilePic(size: 50.r, imageUrl: post.ownerProfileImageUrl),
+        ProfilePic(
+          size: 50.r,
+          imageUrl: post.ownerProfileImageUrl,
+        ),
+
         SizedBox(width: 12.w),
+
         Expanded(
           child: Row(
             children: [
               Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start,
                   children: [
                     Text(
                       displayName,
@@ -41,20 +47,15 @@ class FeedCardHeader extends StatelessWidget {
                       username,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: AppStyles.body14SecondaryRegular,
+                      style:
+                          AppStyles.body14SecondaryRegular,
                     ),
                   ],
                 ),
               ),
+
               if (isCurrentUserPost)
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryOverlay10,
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  child: Text('You', style: AppStyles.label14PrimarySemiBold),
-                ),
+                const YouBadge(),
             ],
           ),
         ),
@@ -62,18 +63,34 @@ class FeedCardHeader extends StatelessWidget {
     );
   }
 
-  String get _displayName {
-    final displayName = post.ownerDisplayName.trim();
-    final username = post.ownerUsername.trim();
+  String _displayName(PostModel post) {
+    final displayName =
+        post.ownerDisplayName.trim();
 
-    if (displayName.isNotEmpty) return displayName;
-    if (username.isNotEmpty) return username;
+    if (displayName.isNotEmpty) {
+      return displayName;
+    }
+
+    final username =
+        post.ownerUsername.trim();
+
+    if (username.isNotEmpty) {
+      return username;
+    }
+
     return 'ConnectHub user';
   }
 
-  String get _username {
-    final username = post.ownerUsername.trim();
-    if (username.isEmpty) return 'ConnectHub';
-    return username.startsWith('@') ? username : '@$username';
+  String _username(PostModel post) {
+    final username =
+        post.ownerUsername.trim();
+
+    if (username.isEmpty) {
+      return 'ConnectHub';
+    }
+
+    return username.startsWith('@')
+        ? username
+        : '@$username';
   }
 }

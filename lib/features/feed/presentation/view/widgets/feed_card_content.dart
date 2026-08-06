@@ -14,21 +14,32 @@ class FeedCardContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final titleStyle =
+        AppStyles.title20SemiBold.copyWith(
+      fontSize: 21.sp,
+    );
+
+    final contentStyle =
+        AppStyles.body16Regular.copyWith(
+      height: 1.4,
+    );
+
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment:
+          CrossAxisAlignment.start,
       children: [
         Text(
           title,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: AppStyles.title20SemiBold.copyWith(fontSize: 21.sp),
+          style: titleStyle,
         ),
         SizedBox(height: 6.h),
         Text(
           content,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
-          style: AppStyles.body16Regular.copyWith(height: 1.4),
+          style: contentStyle,
         ),
       ],
     );

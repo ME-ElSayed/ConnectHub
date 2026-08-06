@@ -10,37 +10,61 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FeedCard extends StatelessWidget {
-  const FeedCard({super.key, required this.post});
+  FeedCard({
+    super.key,
+    required this.post,
+  });
 
   final PostModel post;
 
+  static final AuthService _auth = getIt<AuthService>();
+
   @override
   Widget build(BuildContext context) {
-    final currentUserId = getIt<AuthService>().currentUser?.uid;
     final hasImage = post.imageUrl.trim().isNotEmpty;
 
     return Container(
-      padding: EdgeInsets.fromLTRB(18.w, 12.h, 18.w, 12.h),
+      padding: EdgeInsets.fromLTRB(
+        18.w,
+        12.h,
+        18.w,
+        12.h,
+      ),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(
+          color: AppColors.border,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           FeedCardHeader(
             post: post,
-            isCurrentUserPost: currentUserId == post.ownerId,
+            isCurrentUserPost:
+                _auth.currentUser?.uid == post.ownerId,
           ),
+
           SizedBox(height: 12.h),
-          FeedCardContent(title: post.title, content: post.content),
+
+          FeedCardContent(
+            title: post.title,
+            content: post.content,
+          ),
+
           if (hasImage) ...[
             SizedBox(height: 14.h),
-            FeedCardImage(imageUrl: post.imageUrl),
+            FeedCardImage(
+              imageUrl: post.imageUrl,
+            ),
           ],
+
           SizedBox(height: 12.h),
-          FeedCardFooter(post: post),
+
+          FeedCardFooter(
+            post: post,
+          ),
         ],
       ),
     );
