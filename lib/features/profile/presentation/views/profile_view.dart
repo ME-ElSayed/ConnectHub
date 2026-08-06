@@ -57,14 +57,17 @@ class ProfileView extends StatelessWidget {
                 return CustomScrollView(
                   slivers: [
                     SliverToBoxAdapter(
-                      child: ProfileHeader(
-                        name: state.user?.name ?? 'User',
-                        email: state.user?.email ?? '',
-                        imageUrl: state.user?.photoUrl,
-                        isLoggingOut: state.isLoggingOut,
-                        onLogout: state.isLoggingOut
-                            ? null
-                            : () => context.read<ProfileCubit>().logout(),
+                      child: Padding(
+                        padding: EdgeInsetsGeometry.only(top: 68.h),
+                        child: ProfileHeader(
+                          name: state.user?.name ?? 'User',
+                          email: state.user?.email ?? '',
+                          imageUrl: state.user?.photoUrl,
+                          isLoggingOut: state.isLoggingOut,
+                          onLogout: state.isLoggingOut
+                              ? null
+                              : () => context.read<ProfileCubit>().logout(),
+                        ),
                       ),
                     ),
                     SliverToBoxAdapter(child: SizedBox(height: 16.h)),
