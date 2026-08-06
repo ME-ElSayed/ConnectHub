@@ -1,54 +1,41 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connect_hub/features/auth/data/models/user_model.dart';
+import 'package:equatable/equatable.dart';
 
-class LikeModel {
-  const LikeModel({
-    this.id,
-    required this.user,
-    required this.createdAt,
-    this.likeCount = 0,
-  });
+class LikeModel extends Equatable {
+  const LikeModel({this.id, required this.userId, required this.createdAt});
 
   final String? id;
-  final AppUser user;
+  final String userId;
   final DateTime createdAt;
-  final int likeCount;
 
   factory LikeModel.fromMap(Map<String, dynamic> map, {String? id}) {
     final createdAtValue = map['createdAt'];
-    final userMap = map['user'] as Map<String, dynamic>? ?? const {};
+
+    DateTime parseDateTime(Object? value) {
+      if (value is Timestamp) return value.toDate();
+      if (value is DateTime) return value;
+      return DateTime.now();
+    }
 
     return LikeModel(
       id: id,
-      user: AppUser.fromMap(userMap),
-      createdAt: createdAtValue is Timestamp
-          ? createdAtValue.toDate()
-          : createdAtValue is DateTime
-          ? createdAtValue
-          : DateTime.now(),
-      likeCount: map['likeCount'] as int? ?? 0,
+      userId: map['userId'] as String? ?? '',
+      createdAt: parseDateTime(createdAtValue),
     );
   }
 
   Map<String, dynamic> toMap() {
-    return {
-      'user': user.toMap(),
-      'createdAt': Timestamp.fromDate(createdAt),
-      'likeCount': likeCount,
-    };
+    return {'userId': userId, 'createdAt': Timestamp.fromDate(createdAt)};
   }
 
-  LikeModel copyWith({
-    String? id,
-    AppUser? user,
-    DateTime? createdAt,
-    int? likeCount,
-  }) {
+  LikeModel copyWith({String? id, String? userId, DateTime? createdAt}) {
     return LikeModel(
       id: id ?? this.id,
-      user: user ?? this.user,
+      userId: userId ?? this.userId,
       createdAt: createdAt ?? this.createdAt,
-      likeCount: likeCount ?? this.likeCount,
     );
   }
+
+  @override
+  List<Object?> get props => [id, userId, createdAt];
 }

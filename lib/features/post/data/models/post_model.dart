@@ -1,89 +1,99 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connect_hub/features/post/data/models/comment_model.dart';
-import 'package:connect_hub/features/post/data/models/like_model.dart';
+import 'package:equatable/equatable.dart';
 
-class PostModel {
+class PostModel extends Equatable {
   const PostModel({
     this.id,
-    required this.userId,
+    required this.ownerId,
     required this.title,
     required this.content,
     required this.imageUrl,
     required this.createdAt,
-    this.likes = const [],
-    this.comments = const [],
+    required this.updatedAt,
+    this.likesCount = 0,
+    this.commentsCount = 0,
   });
 
   final String? id;
-  final String userId;
+  final String ownerId;
   final String title;
   final String content;
   final String imageUrl;
   final DateTime createdAt;
-  final List<LikeModel> likes;
-  final List<CommentModel> comments;
+  final DateTime updatedAt;
+  final int likesCount;
+  final int commentsCount;
 
   factory PostModel.fromMap(Map<String, dynamic> map, {String? id}) {
     final createdAtValue = map['createdAt'];
-    final likesData = map['likes'] as List<dynamic>? ?? const [];
-    final commentsData = map['comments'] as List<dynamic>? ?? const [];
+    final updatedAtValue = map['updatedAt'];
+
+    DateTime parseDateTime(Object? value) {
+      if (value is Timestamp) return value.toDate();
+      if (value is DateTime) return value;
+      return DateTime.now();
+    }
 
     return PostModel(
       id: id,
-      userId: map['userId'] as String? ?? '',
+      ownerId: map['ownerId'] as String? ?? '',
       title: map['title'] as String? ?? '',
       content: map['content'] as String? ?? '',
       imageUrl: map['imageUrl'] as String? ?? '',
-      createdAt: createdAtValue is Timestamp
-          ? createdAtValue.toDate()
-          : createdAtValue is DateTime
-          ? createdAtValue
-          : DateTime.now(),
-      likes: likesData
-          .map((likeMap) => LikeModel.fromMap(likeMap as Map<String, dynamic>))
-          .toList(),
-      comments: commentsData
-          .map(
-            (commentMap) =>
-                CommentModel.fromMap(commentMap as Map<String, dynamic>),
-          )
-          .toList(),
+      createdAt: parseDateTime(createdAtValue),
+      updatedAt: parseDateTime(updatedAtValue ?? createdAtValue),
+      likesCount: map['likesCount'] as int? ?? 0,
+      commentsCount: map['commentsCount'] as int? ?? 0,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'userId': userId,
+      'ownerId': ownerId,
       'title': title,
       'content': content,
       'imageUrl': imageUrl,
       'createdAt': Timestamp.fromDate(createdAt),
-      'likes': likes.map((like) => like.toMap()).toList(),
-      'comments': comments.map((comment) => comment.toMap()).toList(),
+      'updatedAt': Timestamp.fromDate(updatedAt),
+      'likesCount': likesCount,
+      'commentsCount': commentsCount,
     };
   }
 
   PostModel copyWith({
     String? id,
-    String? userId,
+    String? ownerId,
     String? title,
     String? content,
     String? imageUrl,
     DateTime? createdAt,
-    int? likeCount,
-    int? commentCount,
-    List<LikeModel>? likes,
-    List<CommentModel>? comments,
+    DateTime? updatedAt,
+    int? likesCount,
+    int? commentsCount,
   }) {
     return PostModel(
       id: id ?? this.id,
-      userId: userId ?? this.userId,
+      ownerId: ownerId ?? this.ownerId,
       title: title ?? this.title,
       content: content ?? this.content,
       imageUrl: imageUrl ?? this.imageUrl,
       createdAt: createdAt ?? this.createdAt,
-      likes: likes ?? this.likes,
-      comments: comments ?? this.comments,
+      updatedAt: updatedAt ?? this.updatedAt,
+      likesCount: likesCount ?? this.likesCount,
+      commentsCount: commentsCount ?? this.commentsCount,
     );
   }
+
+  @override
+  List<Object?> get props => [
+    id,
+    ownerId,
+    title,
+    content,
+    imageUrl,
+    createdAt,
+    updatedAt,
+    likesCount,
+    commentsCount,
+  ];
 }

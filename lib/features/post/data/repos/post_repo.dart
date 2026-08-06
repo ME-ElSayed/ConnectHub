@@ -24,12 +24,14 @@ class PostRepository {
         ? await _imageRepository.uploadImage(image)
         : '';
 
+    final now = DateTime.now();
     final post = PostModel(
-      userId: userId,
+      ownerId: userId,
       title: title,
       content: content,
       imageUrl: imageUrl,
-      createdAt: DateTime.now(),
+      createdAt: now,
+      updatedAt: now,
     );
 
     await _firestoreService.addPost(post);
