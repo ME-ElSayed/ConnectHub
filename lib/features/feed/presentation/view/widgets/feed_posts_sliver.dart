@@ -3,28 +3,18 @@ import 'package:connect_hub/features/feed/presentation/view/widgets/feed_card.da
 import 'package:connect_hub/features/post/data/models/post_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+
+import 'dummy_posts.dart';
 
 class FeedPostsSliver extends StatelessWidget {
-  const FeedPostsSliver({
-    super.key,
-    required this.snapshot,
-  });
+  const FeedPostsSliver({super.key, required this.snapshot});
 
   final AsyncSnapshot<List<PostModel>> snapshot;
 
   @override
   Widget build(BuildContext context) {
-    if (snapshot.connectionState == ConnectionState.waiting &&
-        !snapshot.hasData) {
-      return const SliverFillRemaining(
-        hasScrollBody: false,
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    }
-
-    if (snapshot.hasError && !snapshot.hasData) {
+    if (snapshot.hasError) {
       return SliverFillRemaining(
         hasScrollBody: false,
         child: Center(
@@ -40,37 +30,43 @@ class FeedPostsSliver extends StatelessWidget {
       );
     }
 
-    final posts = snapshot.data ?? const <PostModel>[];
-
-    if (posts.isEmpty) {
-      return SliverFillRemaining(
-        hasScrollBody: false,
-        child: Center(
-          child: Text(
-            'No posts yet.',
-            style: AppStyles.body14SecondaryRegular,
+    if (!snapshot.hasData) {
+      return SliverPadding(
+        padding: EdgeInsets.fromLTRB(12.w, 16.h, 12.w, 10.h),
+        sliver: SliverSkeletonizer(
+          enabled: true,
+          child: SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => Padding(
+                padding: EdgeInsets.only(bottom: 14.h),
+                child: FeedCard(post: skeletonPosts[index]),
+              ),
+              childCount: skeletonPosts.length,
+            ),
           ),
         ),
       );
     }
 
+    final posts = snapshot.data!;
+
+    if (posts.isEmpty) {
+      return SliverFillRemaining(
+        hasScrollBody: false,
+        child: Center(
+          child: Text('No posts yet.', style: AppStyles.body14SecondaryRegular),
+        ),
+      );
+    }
+
     return SliverPadding(
-      padding: EdgeInsets.fromLTRB(
-        12.w,
-        16.h,
-        12.w,
-        10.h,
-      ),
+      padding: EdgeInsets.fromLTRB(12.w, 16.h, 12.w, 10.h),
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            return Padding(
-              padding: EdgeInsets.only(bottom: 14.h),
-              child: FeedCard(
-                post: posts[index],
-              ),
-            );
-          },
+          (context, index) => Padding(
+            padding: EdgeInsets.only(bottom: 14.h),
+            child: FeedCard(post: posts[index]),
+          ),
           childCount: posts.length,
         ),
       ),
