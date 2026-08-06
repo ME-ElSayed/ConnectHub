@@ -3,7 +3,7 @@
 <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <application
-        android:label="connect_hub"
+        android:label="connecthub"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
