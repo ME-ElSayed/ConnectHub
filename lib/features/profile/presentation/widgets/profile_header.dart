@@ -9,12 +9,14 @@ class ProfileHeader extends StatelessWidget {
   const ProfileHeader({
     super.key,
     required this.name,
+    required this.email,
     required this.imageUrl,
     required this.isLoggingOut,
     required this.onLogout,
   });
 
   final String name;
+  final String email;
   final String? imageUrl;
   final bool isLoggingOut;
   final VoidCallback? onLogout;
@@ -33,8 +35,7 @@ class ProfileHeader extends StatelessWidget {
         Text(name, style: AppStyles.title20SemiBold),
         SizedBox(height: 4.h),
         Text(
-          'Product designer & coffee lover ✦ Sharing ideas,\n'
-          'travel & everyday moments.',
+          email.isNotEmpty ? email : 'No email provided',
           textAlign: TextAlign.center,
           style: AppStyles.body14Regular.copyWith(
             color: AppColors.textSecondary,

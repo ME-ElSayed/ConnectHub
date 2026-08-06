@@ -82,6 +82,18 @@ class FirestoreService {
         );
   }
 
+  Stream<List<PostModel>> watchUserPosts(String ownerId) {
+    return _postsCollection
+        .where('ownerId', isEqualTo: ownerId)
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => PostModel.fromMap(doc.data(), id: doc.id))
+              .toList(),
+        );
+  }
+
   Stream<List<CommentModel>> watchComments(String postId) {
     return _commentsCollection(postId)
         .orderBy('createdAt')

@@ -11,6 +11,8 @@ import 'package:connect_hub/features/feed/presentation/cubits/like_cubit.dart';
 import 'package:connect_hub/features/feed/presentation/cubits/likes_cubit.dart';
 import 'package:connect_hub/features/post/data/repos/post_repo.dart';
 import 'package:connect_hub/features/post/presentation/cubits/post_cubit/post_cubit.dart';
+import 'package:connect_hub/features/profile/data/repos/profile_repo.dart';
+import 'package:connect_hub/features/profile/presentation/cubits/profile_cubit/profile_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
@@ -42,6 +44,17 @@ Future<void> setupLocator() async {
       firestoreService: getIt<FirestoreService>(),
       imageRepository: getIt<ImageRepository>(),
     ),
+  );
+
+  getIt.registerLazySingleton<ProfileRepository>(
+    () => ProfileRepository(
+      authRepository: getIt<AuthRepository>(),
+      firestoreService: getIt<FirestoreService>(),
+    ),
+  );
+
+  getIt.registerFactory<ProfileCubit>(
+    () => ProfileCubit(repository: getIt<ProfileRepository>()),
   );
 
   getIt.registerFactory<AuthCubit>(() => AuthCubit(getIt()));

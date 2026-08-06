@@ -4,42 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProfilePostsGrid extends StatelessWidget {
-  const ProfilePostsGrid({super.key});
+  const ProfilePostsGrid({super.key, this.posts = const <ProfilePost>[]});
 
-  static const List<ProfilePost> _posts = [
-    ProfilePost(
-      title: 'Alps weekend\nescape',
-      likes: '248',
-      imageLink: "https://i.ibb.co/SXrF9sL1/image-cropper-1785691682814.jpg",
-    ),
-    ProfilePost(
-      title: 'My morning ritual ☕',
-      likes: '176',
-      imageLink: "https://i.ibb.co/SXrF9sL1/image-cropper-1785691682814.jpg",
-    ),
-    ProfilePost(
-      title: 'Golden hour\ndowntown',
-      likes: '402',
-      imageLink:"https://i.ibb.co/SXrF9sL1/image-cropper-1785691682814.jpg",
-    ),
-    ProfilePost(
-      title: 'Lunch goals 🥗',
-      likes: '91',
-      imageLink: "https://i.ibb.co/SXrF9sL1/image-cropper-1785691682814.jpg",
-    ),
-    ProfilePost(
-      title: 'New workspace\nvibes',
-      likes: '63',
-      imageLink: "https://i.ibb.co/SXrF9sL1/image-cropper-1785691682814.jpg",
-    ),
-  ];
+  final List<ProfilePost> posts;
 
   @override
   Widget build(BuildContext context) {
     return SliverGrid(
       delegate: SliverChildBuilderDelegate((context, index) {
-        return ProfilePostCard(post: _posts[index]);
-      }, childCount: _posts.length ),
+        return ProfilePostCard(post: posts[index]);
+      }, childCount: posts.length),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         mainAxisSpacing: 16.h,
