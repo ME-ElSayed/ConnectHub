@@ -5,6 +5,9 @@ class PostModel extends Equatable {
   const PostModel({
     this.id,
     required this.ownerId,
+    this.ownerUsername = '',
+    this.ownerDisplayName = '',
+    this.ownerProfileImageUrl = '',
     required this.title,
     required this.content,
     required this.imageUrl,
@@ -16,6 +19,9 @@ class PostModel extends Equatable {
 
   final String? id;
   final String ownerId;
+  final String ownerUsername;
+  final String ownerDisplayName;
+  final String ownerProfileImageUrl;
   final String title;
   final String content;
   final String imageUrl;
@@ -34,22 +40,34 @@ class PostModel extends Equatable {
       return DateTime.now();
     }
 
+    int parseInt(Object? value) {
+      if (value is int) return value;
+      if (value is num) return value.toInt();
+      return 0;
+    }
+
     return PostModel(
       id: id,
       ownerId: map['ownerId'] as String? ?? '',
+      ownerUsername: map['ownerUsername'] as String? ?? '',
+      ownerDisplayName: map['ownerDisplayName'] as String? ?? '',
+      ownerProfileImageUrl: map['ownerProfileImageUrl'] as String? ?? '',
       title: map['title'] as String? ?? '',
       content: map['content'] as String? ?? '',
       imageUrl: map['imageUrl'] as String? ?? '',
       createdAt: parseDateTime(createdAtValue),
       updatedAt: parseDateTime(updatedAtValue ?? createdAtValue),
-      likesCount: map['likesCount'] as int? ?? 0,
-      commentsCount: map['commentsCount'] as int? ?? 0,
+      likesCount: parseInt(map['likesCount']),
+      commentsCount: parseInt(map['commentsCount']),
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'ownerId': ownerId,
+      'ownerUsername': ownerUsername,
+      'ownerDisplayName': ownerDisplayName,
+      'ownerProfileImageUrl': ownerProfileImageUrl,
       'title': title,
       'content': content,
       'imageUrl': imageUrl,
@@ -63,6 +81,9 @@ class PostModel extends Equatable {
   PostModel copyWith({
     String? id,
     String? ownerId,
+    String? ownerUsername,
+    String? ownerDisplayName,
+    String? ownerProfileImageUrl,
     String? title,
     String? content,
     String? imageUrl,
@@ -74,6 +95,9 @@ class PostModel extends Equatable {
     return PostModel(
       id: id ?? this.id,
       ownerId: ownerId ?? this.ownerId,
+      ownerUsername: ownerUsername ?? this.ownerUsername,
+      ownerDisplayName: ownerDisplayName ?? this.ownerDisplayName,
+      ownerProfileImageUrl: ownerProfileImageUrl ?? this.ownerProfileImageUrl,
       title: title ?? this.title,
       content: content ?? this.content,
       imageUrl: imageUrl ?? this.imageUrl,
@@ -88,6 +112,9 @@ class PostModel extends Equatable {
   List<Object?> get props => [
     id,
     ownerId,
+    ownerUsername,
+    ownerDisplayName,
+    ownerProfileImageUrl,
     title,
     content,
     imageUrl,

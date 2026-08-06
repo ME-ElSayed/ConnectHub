@@ -4,6 +4,11 @@ import 'package:connect_hub/features/auth/data/repos/auth_repo.dart';
 import 'package:connect_hub/features/auth/data/repos/image_repo.dart';
 import 'package:connect_hub/features/auth/presentation/cubits/auth_cubit/auth_cubit.dart';
 import 'package:connect_hub/features/chat/data/repo/chat_repo.dart';
+import 'package:connect_hub/features/feed/data/services/comment_service.dart';
+import 'package:connect_hub/features/feed/data/services/like_service.dart';
+import 'package:connect_hub/features/feed/presentation/cubits/comment_cubit.dart';
+import 'package:connect_hub/features/feed/presentation/cubits/like_cubit.dart';
+import 'package:connect_hub/features/feed/presentation/cubits/likes_cubit.dart';
 import 'package:connect_hub/features/post/data/repos/post_repo.dart';
 import 'package:connect_hub/features/post/presentation/cubits/post_cubit/post_cubit.dart';
 import 'package:dio/dio.dart';
@@ -16,6 +21,12 @@ Future<void> setupLocator() async {
   getIt.registerLazySingleton<AuthService>(() => AuthService());
   getIt.registerLazySingleton<FirestoreService>(() => FirestoreService());
   getIt.registerLazySingleton<ImageRepository>(() => ImageRepository(getIt()));
+  getIt.registerLazySingleton<CommentService>(
+    () => CommentService(firestoreService: getIt<FirestoreService>()),
+  );
+  getIt.registerLazySingleton<LikeService>(
+    () => LikeService(firestoreService: getIt<FirestoreService>()),
+  );
 
   getIt.registerLazySingleton<AuthRepository>(
     () => AuthRepository(
@@ -39,5 +50,22 @@ Future<void> setupLocator() async {
       repository: getIt<PostRepository>(),
       authService: getIt<AuthService>(),
     ),
+  );
+  getIt.registerFactory<CommentCubit>(
+    () => CommentCubit(
+      commentService: getIt<CommentService>(),
+      authService: getIt<AuthService>(),
+      firestoreService: getIt<FirestoreService>(),
+    ),
+  );
+  getIt.registerFactory<LikeCubit>(
+    () => LikeCubit(
+      likeService: getIt<LikeService>(),
+      authService: getIt<AuthService>(),
+      firestoreService: getIt<FirestoreService>(),
+    ),
+  );
+  getIt.registerFactory<LikesViewModel>(
+    () => LikesViewModel(likeService: getIt<LikeService>()),
   );
 }

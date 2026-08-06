@@ -25,8 +25,16 @@ class PostRepository {
         : '';
 
     final now = DateTime.now();
+    final owner = await _firestoreService.getUser(userId);
+    final ownerEmail = owner?.email.trim() ?? '';
+    final ownerName = owner?.name.trim() ?? '';
     final post = PostModel(
       ownerId: userId,
+      ownerUsername: ownerEmail.contains('@')
+          ? ownerEmail.split('@').first
+          : ownerName,
+      ownerDisplayName: ownerName,
+      ownerProfileImageUrl: owner?.photoUrl ?? '',
       title: title,
       content: content,
       imageUrl: imageUrl,
