@@ -39,7 +39,7 @@ class PostFields extends StatelessWidget {
           validator: (value) => AppValidator.validate(
             value: value!,
             type: ValidationType.content,
-            max: 100,
+            max: 500,
           ),
         ),
       ],
