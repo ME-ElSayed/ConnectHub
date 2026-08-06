@@ -1,13 +1,14 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ImageRepository {
   final Dio dio;
 
   ImageRepository(this.dio);
 
-  static const String _apiKey = "d8f4c73dc8e90780aa89cdcca630ede5";
+  String get _apiKey => dotenv.env['IMGBB_API_KEY']?.trim() ?? '';
 
   Future<String> uploadImage(File image) async {
     final formData = FormData.fromMap({
